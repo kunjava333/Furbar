@@ -36,11 +36,12 @@ adminRoute.post('/showProduct',adminController.show_products);
 //SHOW ORDERS
 adminRoute.get('/order-list1',adminController.show_orders)
 
-//ADD PRODUCTS EDIT PRODUCTS
+//ADD PRODUCTS AND EDIT PRODUCTS
 adminRoute.get('/add-product',adminController.add_products_page)
 adminRoute.post('/add-product',upload.single('image'),adminController.add_product)
 adminRoute.get('/edit/:id',adminController.edit_product)
-
+adminRoute.post('/edit-product/:id',adminController.change_product);
+adminRoute.get('/remove/:id',adminController.product_delete)
 
 
 adminRoute.get('*',(req,res)=>{  

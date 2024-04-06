@@ -1,6 +1,7 @@
 const User = require("../models/usersSchema");
 const bcrypt = require("bcrypt");
 const Otp = require("../controller/otpController");
+const Product = require('../models/productsSchema');
 
 const hashPassword = async (password) => {
   try {
@@ -186,6 +187,45 @@ const user_logout = async(req,res)=>{
   }
 }
 
+
+const show_sofa = async (req,res)=>{
+  try {
+    const dbData = await Product.find({category:'Sofa'})
+    res.render('shop',{dbData:dbData})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
+
+const show_sideBoard = async (req,res)=>{
+  try {
+    const dbData = await Product.find({category:'Sideboard'})
+    res.render('shop',{dbData:dbData})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
+
+
+const show_lampLight = async (req,res)=>{
+  try {
+    const dbData = await Product.find({category:'Lamp light'})
+    console.log(dbData);
+    res.render('shop',{dbData:dbData})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
+
 // const otp_page = (req,res)=>{
 //   try {
 //     otp_resend()
@@ -216,5 +256,8 @@ module.exports = {
   // otp_page,
   products_page,
   product_details,
+  show_sofa,
+  show_sideBoard,
+  show_lampLight,
 
 };

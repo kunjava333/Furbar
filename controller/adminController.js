@@ -129,16 +129,43 @@ const show_products = async (req,res)=>{
 
 const edit_product = async (req,res)=>{
     try {
-        const user_id = req.params.id
-        console.log(user_id);
-        const dbData = await Product.findOne({_id:user_id})
-        console.log(dbData);
+        const product_id = req.params.id
+        // console.log(user_id);
+        const dbData = await Product.findOne({_id:product_id})
+        // console.log(dbData);
         res.render('edit',{dbData:dbData})
     } catch (error) {
         console.log(error.message);
     }
 }
+const change_product = async (req,res)=>{
+    try {
+        const product_id =req.params.id
+        console.log(product_id);
+        const {title,description,price,imageurl,width,hieght,weight,shippingFee,category} = req.body;
+        const check = await Product.findByIdAndUpdate({_id:product_id},{title:title,description:description,price:price,imageurl:imageurl,width:width,hieght:hieght,weight:weight,shippingFee:shippingFee,category:category})
+        console.log(check);
+        if(check){
+            console.log('updated');
+        }
+        res.render('adminHome')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
+const product_delete = async (req,res)=>{
+    try {
+        const product_id = req.params.id
+        const check = await Product.findByIdAndDelete({_id:product_id})
+        if(check){
+            console.log('The product has been deleted');
+        }
+        res.render('products',{message:'The product has been deleted permenantly'})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     admin_login,
@@ -150,7 +177,10 @@ module.exports = {
     add_products_page,
     add_product,
     show_products,
-    edit_product
+    edit_product,
+    change_product,
+    product_delete,
+
 
 }
 

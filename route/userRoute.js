@@ -41,9 +41,13 @@ userRoute.get('/newOtp',userController.otp_resend);
 // userRoute.get('/otpPage',userController.otp_page);
 
 
-//Producs
+//Products
 userRoute.get('/produts',userController.products_page);
-userRoute.get('/product-details',userController.product_details);
+// userRoute.get('/product-details',userController.product_details);
+userRoute.get('/showSideboard',userController.show_sideBoard);
+userRoute.get('/showSofa',userController.show_sofa);
+userRoute.get('/showLamplight',userController.show_lampLight);
+
 
 
 module.exports = userRoute;

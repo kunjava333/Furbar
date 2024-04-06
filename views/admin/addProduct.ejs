@@ -195,9 +195,9 @@
                             <h4>Basic</h4>
                         </div>
                         <div class="card-body">
-                            <form id="form_f" action="add-product" method="post" enctype="multipart/form-data">
+                            <form id="form_f" action="/admin/add-product" method="post" >
                                 <% if (typeof message !== "undefined") { %>
-                                 <p style="color: violet;"><%= message  %></p>
+                                 <p style="color: violet;"><%= message  %></p> 
                                 <% } %>
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label">Product title</label>
@@ -217,7 +217,7 @@
                                                 <input placeholder="$" type="number" class="form_control"
                                                     name="price" />
                                             </div>
-                                        </div>
+                                        </div> 
                                     </div>
                                    
                                     <div class="col-lg-4">
