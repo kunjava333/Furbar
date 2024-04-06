@@ -238,10 +238,13 @@ const show_lampLight = async (req,res)=>{
 
 const product_details = async (req,res)=>{
   try {
+    const produtc_id = req.params.id
+    const dbData = await Product.find({_id:produtc_id})
+    console.log(produtc_id,dbData);
     res.render('productDetail')
   } catch (error) {
     console.log(error.message);
-  }
+  } 
 }
 
 module.exports = {
