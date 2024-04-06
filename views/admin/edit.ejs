@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Nest Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg" />
+    <!-- Template CSS -->
+    <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="dark">
+
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+                    <div>
+                        <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+                        <button type="submit" class="btn btn-md rounded font-sm hover-up"
+                            id="form_button">Publich</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="form_f" action="add-product" method="post" enctype="multipart/form-data">
+                            <% if (typeof message !=="undefined" ) { %>
+                                <p style="color: violet;">
+                                    <%= message %>
+                                </p>
+                                <% } %>
+                                    <% if (typeof dbData !=="undefined" ) { %>
+
+                                        <div class="mb-4">
+                                            <label for="product_name" class="form-label">Product title</label>
+                                            <input type="text" value="<%= dbData.title  %>" class="form-control"
+                                                name="title" id="product_name" />
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Full description</label>
+                                            <textarea class="form-control" rows="4"
+                                                name="description"><%= dbData.description %></textarea>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Regular price</label>
+                                                    <div class="row gx-2">
+                                                        <input value="<%= dbData.price %>" type="number"
+                                                            class="form_control" name="price" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4">
+                                                <label class="form-label">Currency</label>
+                                                <select class="form-select">
+                                                    <option>USD</option>
+                                                    <option>EUR</option>
+                                                    <option>RUBL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                    </div>
+                </div>
+                <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Shipping</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Width</label>
+                                    <input type="text" value="<%= dbData.width  %>" class="form-control"
+                                        id="product_name" name="width" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Height</label>
+                                    <input type="text" value="<%= dbData.hieght %>" class="form-control"
+                                        id="product_name" name="hieght" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Weight</label>
+                            <input type="text" value="<%= dbData.weight %>" class="form-control" id="product_name"
+                                name="weight" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Shipping fees</label>
+                            <input type="text" value="<%= dbData.shippingFee %>" class="form-control" id="product_name"
+                                name="shippingFee" />
+                        </div>
+
+                    </div>
+                </div>
+                <!-- card end// -->
+            </div>
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Media</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-upload">
+                            <img src="/images/<%= dbData.imageurl%>" alt="" />
+                            <input class="form-control" type="file" name="image" />
+                        </div>
+                    </div>
+                </div>
+                <!-- card end// -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Organization</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" name="category">
+                                    <option><%= dbData.category %></option>
+                                    <!-- <option>Sofa</option>
+                                    <option>Lamp light</option> -->
+                                    <!-- <option>Smartphones</option>
+                                <option>Sport items</option>
+                                <option>Baby and Tous</option> -->
+                                </select>
+                            </div>
+                            <% } %>
+                                </form>
+
+                                <!-- <div class="col-sm-6 mb-3">
+                            <label class="form-label">Sub-category</label>
+                            <select class="form-select">
+                                <option>Nissan</option>
+                                <option>Honda</option>
+                                <option>Mercedes</option>
+                                <option>Chevrolet</option>
+                            </select>
+                        </div> -->
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Tags</label>
+                                    <input type="text" class="form-control" />
+                                </div>
+                        </div>
+                        <!-- row.// -->
+                    </div>
+                </div>
+                <!-- card end// -->
+            </div>
+        </div>
+    </section>
+    <!-- content-main end// -->
+    <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+            <div class="col-sm-6">
+                <script>
+                    document.write(new Date().getFullYear());
+                    const button = document.getElementById('form_button');
+                    const form = document.getElementById('form_f');
+
+                    button.addEventListener('click', function () {
+                        form.submit()
+                    })
+                </script>
+                &copy; Nest - HTML Ecommerce Template .
+            </div>
+            <div class="col-sm-6">
+                <div class="text-sm-end">All rights reserved</div>
+            </div>
+        </div>
+    </footer>
+    </main>
+    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/vendors/select2.min.js"></script>
+    <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab || www.codinglabweb.com -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Verification Form</title>
+  <link rel="stylesheet" href="assets/css/plugins/style.css"/>
+  <!-- Boxicons CSS -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <i class="bx bxs-check-shield"></i>
+    </header>
+    <h4>Enter OTP Code</h4>
+    <form action="/otp" method="post" id="form">
+      <div class="input-field">
+        <input type="number" id="otp-digit-1" name="otp1" minlength="1"/>
+        <input type="number" id="otp-digit-2" name="otp1" minlength="1"/>
+        <input type="number" id="otp-digit-3" name="otp1" minlength="1"/>
+        <input type="number" id="otp-digit-4" name="otp1" minlength="1"/>
+      </div>
+      <button id="submit" type="submit">Verify OTP</button>
+    </form>
+    <div id="timer-container">
+      <span id="timer"></span>
+    </div>
+    <div id="text-container">
+      <p style="color: red;" id="text"></p>
+    </div>
+    <div id="button">
+      <a href="/newOtp">Resend otp</a>
+    </div>
+  </div>
+
+  <script>
+    const otpInputs = document.querySelectorAll('#otp-digit-1, #otp-digit-2, #otp-digit-3, #otp-digit-4');
+    const form = document.getElementById('form');
+
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('keyup', (event) => {
+        if (event.key !== 'Backspace' && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+      });
+    });
+
+    // Focus on the first input on page load
+    otpInputs[0].focus();
+
+    function timer() {
+  let button = document.getElementById('button');
+  let timerElement = document.getElementById('timer');
+  let textElement = document.getElementById('text');
+  let timerValue = 60;
+  let countdown; // Variable to store the interval
+
+  // Function to start the timer
+  const startTimer = () => {
+    countdown = setInterval(() => {
+      timerValue--;
+      timerElement.textContent = `Time remaining: ${timerValue} seconds`;
+
+      if (timerValue === 0) {
+        clearInterval(countdown);
+        textElement.textContent = 'Time has expired';
+      }
+    }, 1000);
+  };
+
+  // Call the startTimer function to initiate the timer
+  startTimer();
+
+  // Event listener for the button click to resend OTP
+  button.addEventListener('click', () => {
+    clearInterval(countdown); // Clear the previous timer
+    timerValue = 60; // Reset timer value
+    textElement.textContent = ''; // Clear any previous messages
+    startTimer(); // Start a new timer
+  });
+}
+
+// Call the timer function when the OTP page loads
+window.addEventListener('load', timer);
+
+  </script>
+  <script src="assets/js/plugins/script.js"></script>
+</body> 
+</html>
