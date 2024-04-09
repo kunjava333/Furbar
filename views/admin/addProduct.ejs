@@ -195,7 +195,7 @@
                             <h4>Basic</h4>
                         </div>
                         <div class="card-body">
-                            <form id="form_f" action="/admin/add-product" method="post" >
+                            <form id="form_f" action="/admin/add-product" method="post" enctype="multipart/form-data">
                                 <% if (typeof message !== "undefined") { %>
                                  <p style="color: violet;"><%= message  %></p> 
                                 <% } %>

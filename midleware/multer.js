@@ -2,12 +2,11 @@ const multer = require('multer');
 const path = require('path');
 
 const storage = multer.diskStorage({
-    // Destination to store image
     destination: 'images',
     filename: (req, file, cb) => {
-        // Extract the filename without extension
-        const filename = path.parse(file.originalname).name;
-        cb(null, filename);
+        const ext = path.extname(file.originalname);
+        const uniqueFilename = `image_${Date.now()}${ext}`;
+        cb(null, uniqueFilename);
     }
 });
 

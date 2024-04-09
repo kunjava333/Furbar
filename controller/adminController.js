@@ -95,24 +95,26 @@ const add_product = async (req,res)=>{
         description:req.body.description,
         price:req.body.price,
         date:Date.now(),
-        imageurl:req.file.path,  
+        imageurl:req.file.filename,  
         width:req.body.width,
         hieght:req.body.hieght,
         weight:req.body.weight,
         shippingFee:req.body.shippingFee,
         category:req.body.category,
      })
-     console.log(product.width,product.hieght);
+    
+     
      if(product){
         const check = await product.save()
         if(check){
             res.render('addProduct',{message:'woked very well'})
          }else {
-            res.render('addProduct',{message:'some problem in addin product please try again'})
+            res.render('addProduct',{message:'some problem in adding product please try again'})
          }
      }
     } catch (error) {
-        console.log(error.message);
+        console.log(req.file);
+        console.log('here is the problem');
     }
 }
 
