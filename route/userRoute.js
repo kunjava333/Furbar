@@ -16,7 +16,6 @@ userRoute.use(session({
 const userController = require('../controller/userController');
 const checkSession  = require('../midleware/session');
 
-
 //User Login
 userRoute.get('/',checkSession.isLogout,userController.user_login);
 userRoute.get('/login',checkSession.isLogout,userController.user_login);

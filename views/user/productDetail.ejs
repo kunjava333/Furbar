@@ -2,7 +2,7 @@
 <html lang="en">
 
 
-<!-- Mirrored from htmldemo.net/furbar-1/furbar/product-details-affiliate.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:16:17 GMT -->
+<!-- Mirrored from htmldemo.net/furbar-1/furbar/product-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:16:16 GMT -->
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
@@ -51,20 +51,19 @@
                         <ul class="nav-menu">
                             <li>
                                 <a href="#">Home</a>
-                                
                             </li>
                             <li><a href="about.html">About</a></li>
                             <li>
                                 <a href="#">Shop</a>
-                               
+                             
                             </li>
                             <li>
                                 <a href="#">Pages </a>
-                              
+                               
                             </li>
                             <li>
                                 <a href="#">Blog</a>
-                               
+                              
                             </li>
                             <li><a href="contact.html">Contact</a></li>
                         </ul>
@@ -484,6 +483,8 @@
     <!-- Page Banner Section End -->
 
     <!-- Product Details Section Start -->
+        
+
     <div class="section section-padding-02">
         <div class="container">
             <!-- Product Section Wrapper Start -->
@@ -493,11 +494,11 @@
                         <!-- Product Details Images Start -->
                         <div class="product-details-images">
                             <!-- Details Gallery Images Start -->
-                            <div class="details-gallery-images">
+                            <div class="details-gallery-images" id="img-container">
                                 <div class="swiper-container">
                                     <div class="swiper-wrapper">
                                         <div class="swiper-slide single-img zoom">
-                                            <img src="/assets/images/product-details/product-details-1.jpg" width="570" height="604" alt="Product Image" />
+                                            <img src="/images/<%= dbData[0].imageurl  %>" width="100" height="100" alt="Product Image" />
                                         </div>
                                         <div class="swiper-slide single-img zoom">
                                             <img src="/assets/images/product-details/product-details-2.jpg" width="570" height="604" alt="Product Image" />
@@ -523,8 +524,10 @@
                             <div class="details-gallery-thumbs">
                                 <div class="swiper-container">
                                     <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <img src="/assets/images/product-details/product-details-1.jpg" width="88" height="93" alt="Product Thumbnail" />
+                                         
+                                        
+                                        <div class="swiper-slide single-img zoom">
+                                            <img src="/images/<%= dbData[0].imageurl %>" width="88" height="93" alt="Product Thumbnail" />
                                         </div>
                                         <div class="swiper-slide">
                                             <img src="/assets/images/product-details/product-details-2.jpg" width="88" height="93" alt="Product Thumbnail" />
@@ -539,7 +542,7 @@
                                             <img src="/assets/images/product-details/product-details-5.jpg" width="88" height="93" alt="Product Thumbnail" />
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
                                 <!-- Add Arrows -->
                                 <div class="swiper-button-prev">
                                     <i class="pe-7s-angle-left"></i>
@@ -552,56 +555,87 @@
                         </div>
                         <!-- Product Details Images End -->
                     </div>
-                    <!-- <% if (typeof dbData !== "undefined") { %> -->
-                        
-                  
                     <div class="col-lg-6">
                         <!-- Product Details Description Start -->
                         <div class="product-details-description">
                             <h4 class="product-name">
-                               <%= dbData.title %>
+                                High quality vase bottle.
                             </h4>
                             <div class="price">
-                                <span class="sale-price">$<%= dbData.price  %></span>
-                                <span class="old-price">$<%= dbData.price %></span>
+                                <span class="sale-price">$<%= dbData[0].price %></span>
+                                <!-- <span class="old-price">$290.00</span> -->
                             </div>
                             <div class="review-wrapper">
                                 <div class="review-star">
                                     <div class="star" style="width: 80%"></div>
                                 </div>
-                                <p>( 1 Customer Review )</p>
+                                <p>
+                                    <a href="#reviews">( 1 Customer Review )</a>
+                                </p>
                             </div>
 
+                            <!-- <div class="product-color">
+                                <span class="lable">Color:</span>
+                                <ul>
+                                    <li>
+                                        <input type="radio" name="colors" id="color1" />
+                                        <label for="color1"><span class="color-blue"></span></label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="colors" id="color2" />
+                                        <label for="color2"><span class="color-gray"></span></label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="colors" id="color3" />
+                                        <label for="color3"><span
+                                                    class="color-dark-blue"
+                                                ></span></label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="colors" id="color4" />
+                                        <label for="color4"><span
+                                                    class="color-gray-dark"
+                                                ></span></label>
+                                    </li>
+                                </ul>
+                            </div> -->
+
                             <p>
-                                Lorem ipsum dolor sit amet, consectet
-                                adipisicing elit, sed do eiusmod temporf
-                                incididunt ut labore et dolore magna aliqua.
-                                Ut enim ad minim veniam, quis tyu nostrud
-                                exercitation ullamco laboris nisi ut aliquip
-                                ex ea commodo consequat. Duis aute irure
-                                dolor in reprehenderit in voluptate.
+                               <%= dbData[0].description %>
                             </p>
 
                             <div class="product-meta">
+                                <div class="product-quantity d-inline-flex">
+                                    <button type="button" class="sub">
+                                        -
+                                    </button>
+                                    <input type="text" value="1" />
+                                    <button type="button" class="add">
+                                        +
+                                    </button>
+                                </div>
                                 <div class="meta-action">
-                                    <a href="https://1.envato.market/c/417168/275988/4415?subId1=hastheme&amp;subId2=demo&amp;subId3=https%3A%2F%2Fthemeforest.net%2Fuser%2Fhastech%2Fportfolio&amp;u=https%3A%2F%2Fthemeforest.net%2Fuser%2Fhastech%2Fportfolio" class="btn btn-dark btn-hover-primary">Buy Now</a>
+                                    <button class="btn btn-dark btn-hover-primary">
+                                        Add To Cart
+                                    </button>
+                                </div>
+                                <div class="meta-action">
+                                    <a class="action" href="#"><i class="pe-7s-like"></i></a>
+                                </div>
+                                <div class="meta-action">
+                                    <a class="action" href="#"><i class="pe-7s-shuffle"></i></a>
                                 </div>
                             </div>
 
                             <div class="product-info">
                                 <div class="single-info">
-                                    <span class="lable"
-                                            >Guaranteed safe checkout:</span>
-                                    <span class="value"
-                                            ><img
-                                                src="/assets/images/payment.png"
-                                                alt="Payment"
-                                        /></span>
+                                    <span class="lable">SKU:</span>
+                                    <span class="value">Ch-256xl</span>
                                 </div>
                                 <div class="single-info">
                                     <span class="lable">Categories:</span>
                                     <span class="value"
-                                            ><a href="#">Office,</a>
+                                            ><a href="#"><%= dbData[0].category %></a>
                                             <a href="#">Home</a></span>
                                 </div>
                                 <div class="single-info">
@@ -643,7 +677,6 @@
                         </div>
                         <!-- Product Details Description End -->
                     </div>
-                    <% } %>
                 </div>
             </div>
             <!-- Product Section Wrapper End -->
@@ -1750,5 +1783,5 @@
 </body>
 
 
-<!-- Mirrored from htmldemo.net/furbar-1/furbar/product-details-affiliate.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:16:17 GMT -->
+<!-- Mirrored from htmldemo.net/furbar-1/furbar/product-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:16:17 GMT -->
 </html>

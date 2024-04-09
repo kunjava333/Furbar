@@ -27,7 +27,8 @@ const admin_auth = async (req,res)=>{
 //PRODUCTS
 const product_grid = async (req,res)=>{
     try {
-        res.render('products')
+        const dbData = await Product.find({})
+        res.render('products',{dbData:dbData})
     } catch (error) {
         console.log(error.message);
     }
@@ -39,8 +40,9 @@ const product_grid = async (req,res)=>{
 //USER CONTROLER
 const show_user = async (req,res)=>{
     try {
-        const dbData =  User.findOne({ isAdmin: false });
-        res.render('Controler',{message:dbData})
+        const dbData =  await User.find({ isAdmin: false });
+        console.log(dbData);
+        res.render('Controler',{dbData:dbData})
     } catch (error) {
         console.log(error.message);
     }
@@ -120,7 +122,7 @@ const show_products = async (req,res)=>{
         console.log(category);
         const dbData = await Product.find({category:category})
         // console.log(dbData);
-
+        
         res.render('products',{dbData:dbData})
     } catch (error) {
         console.log(error.message);
@@ -167,6 +169,32 @@ const product_delete = async (req,res)=>{
     }
 }
 
+const block_user = async (req,res)=>{
+    try {
+        const user_id = req.params.id
+        const check = await User.findByIdAndUpdate({_id:user_id},{$set:{isBlocked:true}})
+        if(check){
+            console.log('blocked');
+            res.redirect('/admin/users1')
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const unblock_user = async (req,res)=>{
+    try {
+        const user_id = req.params.id
+        const check = await User.findByIdAndUpdate({_id:user_id},{$set:{isBlocked:false}})
+        if(check){
+            console.log('unblocked');
+            res.redirect('/admin/users1')
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     admin_login,
     admin_auth,
@@ -180,7 +208,8 @@ module.exports = {
     edit_product,
     change_product,
     product_delete,
-
+    block_user,
+    unblock_user,
 
 }
 

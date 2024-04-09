@@ -1,7 +1,7 @@
 const User = require("../models/usersSchema");
 const bcrypt = require("bcrypt");
 const Otp = require("../controller/otpController");
-const Product = require('../models/productsSchema');
+const Product = require("../models/productsSchema");
 
 const hashPassword = async (password) => {
   try {
@@ -63,13 +63,13 @@ const create_user = async (req, res) => {
       const otp = Otp.sendOtp(req.body.email);
       console.log(otp);
       if (otp) {
-        console.log('they are here');
+        console.log("they are here");
         req.session.otp = otp;
         // console.log(req.session.otp);
         // setTimeout(()=>{
         //   delete req.session.otp
         // },60000)
-      res.render('otpVerifyer');
+        res.render("otpVerifyer");
       } else {
         console.log("Problem in storing otp in session ");
       }
@@ -90,11 +90,11 @@ const otp_verify = async (req, res) => {
     // console.log(req.session)
     if (req.session.otp == Otp) {
       const userData = req.session.userData;
-      const user = new User(userData)
-      await user.save()
-      const dbData = await User.findOne({email:user.email})
-      req.session.user_id = dbData._id
-      delete req.session.userData
+      const user = new User(userData);
+      await user.save();
+      const dbData = await User.findOne({ email: user.email });
+      req.session.user_id = dbData._id;
+      delete req.session.userData;
       res.redirect("/Home");
     } else {
       res.render("userRegister", {
@@ -114,13 +114,13 @@ const userHome = async (req, res) => {
   }
 };
 
-const products_page = async(req,res)=>{
+const products_page = async (req, res) => {
   try {
-    res.render('products')
+    res.render("products");
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 const user_login = async (req, res) => {
   try {
@@ -130,11 +130,9 @@ const user_login = async (req, res) => {
   }
 };
 
-
-const otp_resend = async (req,res)=>{
- 
+const otp_resend = async (req, res) => {
   try {
-    const {email} = req.session.userData
+    const { email } = req.session.userData;
     // console.log(email);
     // console.log(req.session.userData);
     // console.log(email);
@@ -142,35 +140,36 @@ const otp_resend = async (req,res)=>{
     console.log(`your new otp ${otp}`);
     delete req.session.otp;
     // console.log(req.session.otp);
-    req.session.otp = otp
+    req.session.otp = otp;
     console.log(req.session.otp);
-    res.render('otpVerifyer')
+    res.render("otpVerifyer");
   } catch (error) {
     console.log(error.message);
   }
-
-}
-
-
+};
 
 const auth_user = async (req, res) => {
   try {
     const logEmail = req.body.email;
     const logPassowrd = req.body.password;
     const dbData = await User.findOne({ email: logEmail });
-    if (!dbData) {
-      res.render("userLogin", { message: "wrong email please try again" });
+    if (dbData.isBlocked == true) {
+      res.render("userLogin", { message: "you are restricted" });
     } else {
-      const comparePassword = await bcrypt.compare(
-        logPassowrd,
-        dbData.password
-      );
+      if (!dbData) {
+        res.render("userLogin", { message: "wrong email please try again" });
+      } else {
+        const comparePassword = await bcrypt.compare(
+          logPassowrd,
+          dbData.password
+        );
 
-      if (dbData.email == logEmail && comparePassword) {
-        req.session.user_id = dbData._id
-        res.redirect("/Home");
-      } else if (!comparePassword) {
-        res.render("userLogin", { message: "the password is incorrect" });
+        if (dbData.email == logEmail && comparePassword) {
+          req.session.user_id = dbData._id;
+          res.redirect("/Home");
+        } else if (!comparePassword) {
+          res.render("userLogin", { message: "the password is incorrect" });
+        }
       }
     }
   } catch (error) {
@@ -178,53 +177,42 @@ const auth_user = async (req, res) => {
   }
 };
 
-const user_logout = async(req,res)=>{
+const user_logout = async (req, res) => {
   try {
-     req.session.destroy();
-     res.redirect('/')
+    req.session.destroy();
+    res.redirect("/");
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
-
-const show_sofa = async (req,res)=>{
+const show_sofa = async (req, res) => {
   try {
-    const dbData = await Product.find({category:'Sofa'})
-    res.render('shop',{dbData:dbData})
+    const dbData = await Product.find({ category: "Sofa" });
+    res.render("shop", { dbData: dbData });
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
-
-
-
-const show_sideBoard = async (req,res)=>{
+const show_sideBoard = async (req, res) => {
   try {
-    const dbData = await Product.find({category:'Sideboard'})
-    res.render('shop',{dbData:dbData})
+    const dbData = await Product.find({ category: "Sideboard" });
+    res.render("shop", { dbData: dbData });
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
-
-
-
-
-const show_lampLight = async (req,res)=>{
+const show_lampLight = async (req, res) => {
   try {
-    const dbData = await Product.find({category:'Lamp light'})
+    const dbData = await Product.find({ category: "Lamp light" });
     console.log(dbData);
-    res.render('shop',{dbData:dbData})
+    res.render("shop", { dbData: dbData });
   } catch (error) {
     console.log(error.message);
   }
-}
-
-
-
+};
 
 // const otp_page = (req,res)=>{
 //   try {
@@ -233,19 +221,19 @@ const show_lampLight = async (req,res)=>{
 //   } catch (error) {
 //     console.log(error.message);
 //   }
- 
+
 // }
 
-const product_details = async (req,res)=>{
+const product_details = async (req, res) => {
   try {
-    const produtc_id = req.params.id
-    const dbData = await Product.find({_id:produtc_id})
-    console.log(produtc_id,dbData);
-    res.render('productDetail')
+    const produtc_id = req.params.id;
+    const dbData = await Product.find({ _id: produtc_id });
+    console.log(dbData);
+    res.render("productDetail", { dbData: dbData });
   } catch (error) {
     console.log(error.message);
-  } 
-}
+  }
+};
 
 module.exports = {
   user_login,
@@ -262,5 +250,4 @@ module.exports = {
   show_sofa,
   show_sideBoard,
   show_lampLight,
-
 };

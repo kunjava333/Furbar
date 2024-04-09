@@ -26,8 +26,10 @@ adminRoute.get('/',adminController.admin_login);
 adminRoute.post('/adminLog',adminController.admin_auth)
 adminRoute.get('/adminHome',adminController.adminHome)
 
-//SHOW USERS
+//SHOW USERS AND CONTROLL USER
 adminRoute.get('/users1',adminController.show_user);
+adminRoute.get('/block/:id',adminController.block_user);
+adminRoute.get('/unblock/:id',adminController.unblock_user)
 
 //SHOW PRODUCTS
 adminRoute.get('/product-list1',adminController.product_grid);
