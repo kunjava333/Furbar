@@ -61,10 +61,15 @@ const create_user = async (req, res) => {
       req.session.userData = user;
       // console.log(req.session.userData);
       const otp = Otp.sendOtp(req.body.email);
+    
       console.log(otp);
       if (otp) {
         console.log("they are here");
         req.session.otp = otp;
+        setTimeout(()=>{
+          delete req.session.otp
+        ,60000});
+
         // console.log(req.session.otp);
         // setTimeout(()=>{
         //   delete req.session.otp
@@ -207,7 +212,7 @@ const show_sideBoard = async (req, res) => {
 const show_lampLight = async (req, res) => {
   try {
     const dbData = await Product.find({ category: "Lamp light" });
-    console.log(dbData);
+    // console.log(dbData);
     res.render("shop", { dbData: dbData });
   } catch (error) {
     console.log(error.message);
@@ -228,7 +233,7 @@ const product_details = async (req, res) => {
   try {
     const produtc_id = req.params.id;
     const dbData = await Product.find({ _id: produtc_id });
-    console.log(dbData);
+    // console.log(dbData);
     res.render("productDetail", { dbData: dbData });
   } catch (error) {
     console.log(error.message);

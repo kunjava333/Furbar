@@ -4,9 +4,14 @@ const isLogin = async (req, res, next) => {
       if (req.session.user_id) {
         const {user_id} = req.session;
         const dbData = await User.findOne({_id:user_id})
-        dbData.isBlocked == false? next():res.redirect('/'),req.session.destroy((err)=>console.log(err));
+       if(dbData.isBlocked == true){
+        delete req.session.user_id
+        res.redirect('/')
+       }else{
+        next()
+       }
       } else {
-      return res.redirect('/'); 
+      return res.redirect('/');   
       }
     } catch (error) { 
       console.log(error.message);

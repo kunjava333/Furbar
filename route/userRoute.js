@@ -10,14 +10,14 @@ userRoute.use(express.urlencoded({extended:true}))
 userRoute.use(session({
     secret: 'your-secret-here',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: true
   }));;
 
 const userController = require('../controller/userController');
 const checkSession  = require('../midleware/session');
 
 //User Login
-userRoute.get('/',checkSession.isLogout,userController.user_login);
+userRoute.get('/',checkSession.isLogout,userController.userHome);
 userRoute.get('/login',checkSession.isLogout,userController.user_login);
 userRoute.post('/login',userController.auth_user);
 
