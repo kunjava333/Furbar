@@ -1184,7 +1184,7 @@ blockquote .blockquote-name::before {
 .single-img {
   position: relative; /* Establish positioning context for absolutely positioned elements */
   width: 300px; /* Set the width of the image container */
-  height: 900px; /* Set the height of the image container */
+  height: 575px; /* Set the height of the image container */
   background-size: 100%; /* Initially set background size to cover the container */
   background-repeat: no-repeat; /* Ensure the background image does not repeat */
   transition: background-size 1s ease; /* Add smooth transition for background size property */

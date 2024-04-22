@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
     //     required:true
     // },
     imageurl:{
-        type:String,
+        type:Array,
         required:true
     },
     // alt_text:{
@@ -48,6 +48,9 @@ const productSchema = new mongoose.Schema({
     },
     category:{
         type:String,
+        required:true
+    },blockProduct:{
+        type:Boolean,
         required:true
     }
 })

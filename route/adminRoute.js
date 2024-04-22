@@ -1,4 +1,5 @@
 const express = require('express');
+
 const adminRoute = express();
 const session = require('express-session');
 // const path = require('path')
@@ -17,10 +18,11 @@ adminRoute.use(session({
 
 
 
-
+const adminSession = require('../midleware/adminSession')
 const adminController = require('../controller/adminController')
 const upload = require('../midleware/multer')
-
+const productControler = require('../controller/productControler')
+const categoryControler = require('../controller/categoryControler')
 
 adminRoute.get('/',adminController.admin_login);
 adminRoute.post('/adminLog',adminController.admin_auth)
@@ -32,21 +34,36 @@ adminRoute.get('/block/:id',adminController.block_user);
 adminRoute.get('/unblock/:id',adminController.unblock_user)
 
 //SHOW PRODUCTS
-adminRoute.get('/product-list1',adminController.product_grid);
-adminRoute.post('/showProduct',adminController.show_products);
+adminRoute.get('/product-list1',productControler.product_grid);
+adminRoute.post('/showProduct',productControler.show_products);
+
+//BLOCK AND UNBLOCK PRODUCT
+adminRoute.get('/Hide/:id',productControler.block_product)
+adminRoute.get('/Show/:id',productControler.unblock_product)
+
 
 //SHOW ORDERS
-adminRoute.get('/order-list1',adminController.show_orders);
+adminRoute.get('/show-orders',adminController.show_orders);
+
+
 
 //ADD PRODUCTS AND EDIT PRODUCTS
 adminRoute.get('/add-product',adminController.add_products_page);
-adminRoute.post('/add-product',upload.single('image'),adminController.add_product)
-adminRoute.get('/edit/:id',adminController.edit_product);
-adminRoute.post('/edit-product/:id',adminController.change_product);
-adminRoute.get('/remove/:id',adminController.product_delete);
+adminRoute.post('/add-product',upload.array('image',4),productControler.add_product)
+adminRoute.get('/edit/:id',productControler.edit_product);
+adminRoute.post('/edit-product/:id',productControler.change_product);
+adminRoute.get('/remove/:id',productControler.product_delete);
 
 
-adminRoute.get('*',(req,res)=>{  
+
+//CATEGORY CONTROLER
+adminRoute.get('/categoryManegement',categoryControler.category_page);
+adminRoute.get('/addCategory',categoryControler.add_category_page);
+adminRoute.post('/adddCategory',categoryControler.add_category);
+adminRoute.get('/unlist/:id',categoryControler.unlist_category);
+adminRoute.get('/list/:id',categoryControler.list_category);
+
+adminRoute.get('*',(req,res)=>{   
     res.redirect('/admin')
     
 });

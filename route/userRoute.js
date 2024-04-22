@@ -15,9 +15,10 @@ userRoute.use(session({
 
 const userController = require('../controller/userController');
 const checkSession  = require('../midleware/session');
+const productController = require('../controller/productControler');
 
 //User Login
-userRoute.get('/',checkSession.isLogout,userController.userHome);
+userRoute.get('/',checkSession.isLogout,userController.user_login);
 userRoute.get('/login',checkSession.isLogout,userController.user_login);
 userRoute.post('/login',userController.auth_user);
 
@@ -41,11 +42,11 @@ userRoute.get('/newOtp',userController.otp_resend);
 
 
 //Products
-userRoute.get('/produts',userController.products_page);
-userRoute.get('/product_details/:id',userController.product_details);
-userRoute.get('/showSideboard',userController.show_sideBoard);
-userRoute.get('/showSofa',userController.show_sofa);
-userRoute.get('/showLamplight',userController.show_lampLight);
+// userRoute.get('/produts',productController.products_page);
+userRoute.get('/product_details/:id',productController.product_details);
+userRoute.get('/showProduct-user/:category',productController.show_products_user);
+// userRoute.get('/showSofa',productController.show_sofa);
+// userRoute.get('/showLamplight',productController.show_lampLight);
 
 
 

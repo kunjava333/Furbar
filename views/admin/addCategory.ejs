@@ -31,13 +31,13 @@
         </div>
         <nav>
             <ul class="menu-aside ">
-                <li class="menu-item ">
+                <li class="menu-item active ">
                     <a class="menu-link" href="/admin/adminHome">
                         <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item active">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/product-list1">
                         <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
@@ -62,7 +62,7 @@
                         <span class="text">Add product</span>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                     <a class="menu-link" href="/admin/categoryManegement">
                         <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Category</span>
@@ -113,7 +113,7 @@
             <br />
             <br />
         </nav>
-    </aside>
+    </aside>-
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
@@ -152,20 +152,20 @@
                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
                             aria-expanded="false"><i class="material-icons md-public"></i></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="/assets/imgs/theme/flag-us.png"
+                            <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png"
                                     alt="English" />English</a>
-                            <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-fr.png"
+                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png"
                                     alt="Français" />Français</a>
-                            <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-jp.png"
+                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png"
                                     alt="Français" />日本語</a>
-                            <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-cn.png"
+                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png"
                                     alt="Français" />中国人</a>
                         </div>
                     </li>
                     <li class="dropdown nav-item">
                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
                             aria-expanded="false"> <img class="img-xs rounded-circle"
-                                src="/assets/imgs/people/avatar-2.png" alt="User" /></a>
+                                src="assets/imgs/people/avatar-2.png" alt="User" /></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                             <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
                                 Profile</a>
@@ -187,74 +187,77 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Products</h2>
-                    <% if (typeof message !=="undefined" ) { %>
-                        <p style="color: green;">
-                            <%= message %>
-                        </p>
-                        <% } %>
+                    <h2 class="content-title card-title">Categories</h2>
+                    <p>Add, edit or delete a category</p>
+
+                    <% if (typeof message !== "undefined") { %>
+
+                    <p style="color: rgb(0, 187, 87);"><%= message %></p>
+
+                   <% } %>
 
                 </div>
                 <div>
-                    <a href="#" class="btn btn-light rounded font-md">Export</a>
-                    <a href="#" class="btn btn-light rounded font-md">Import</a>
-                    <a href="/admin/add-product" class="btn btn-primary btn-sm rounded">Create new</a>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white" />
                 </div>
             </div>
-            <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row gx-3">
-                        <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control" />
-                        </div>
-                        <div class="col-lg-2 col-6 col-md-3">
-                            <form>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <form action="/admin/adddCategory" method="post" id="form">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Name</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="categoryName"
+                                        name="name" onkeyup="validateCategoryName()" required/>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control"
+                                        name="description" required></textarea>
+                                </div>
 
-                                <select class="form-select" name="category" id="categorySelect"
-                                    onchange="categoryData()" id="choose" required>
-
-                                    <% if (typeof category !=="undefined" ) { %>
-
-                                        <% category.forEach(element=> { %>
-                                            <option id="option">
-                                                <%= element.name %>
-                                            </option>
-
-                                            <% }); %>
-
-                                                <% } %>
-
-                                </select>
+                                <div class="d-grid col-md-2">
+                                    <button id="button" class="btn btn-primary">Create category</button>
+                                </div>
                             </form>
-                        </div>
 
-                        <div class="col-lg-2 col-6 col-md-3">
-                            <select class="form-select">
-                                <option>Latest added</option>
-                                <option>Cheap first</option>
-                                <option>Most viewed</option>
-                            </select>
                         </div>
+                        <!-- .col// -->
                     </div>
-
-                </header>
-                <!-- card-header end// -->
-                <div class="container">
-                    <div id="container" class="row row-cols-1 row-cols-md-4 g-4">
-                           
-                           
-                    </div>
-                  
+                    <!-- .row // -->
+                </div>
+                <!-- card body .// -->
             </div>
-
-
+            <!-- card .// -->
         </section>
-
         <!-- content-main end// -->
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
-                  
+                    <script>
+                        document.write(new Date().getFullYear());
+                        function validateCategoryName() {
+                            var button = document.getElementById('button')
+                            var categoryName = document.getElementById("categoryName").value;
+                            var regex = /^[a-zA-Z\s]+$/; // Regular expression to match only letters and whitespace
+                            if (!regex.test(categoryName)) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Category name can only contain letters and spaces!",
+                                    footer: '<a href="#">Why do I have this issue?</a>'
+                                });
+                                button.disabled = true
+                            } else {
+                                button.disabled = false
+                            }
+
+
+                        }
+
+
+                    </script>
                     &copy; Nest - HTML Ecommerce Template .
                 </div>
                 <div class="col-sm-6">
@@ -263,15 +266,14 @@
             </div>
         </footer>
     </main>
+    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/assets/js/script.js"></script>
-    <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/vendors/select2.min.js"></script>
-    <script src="/assets/js/vendors/perfect-scrollbar.js"></script>
-    <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/vendors/select2.min.js"></script>
+    <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
-    <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
+    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
 </body>
 
 </html>

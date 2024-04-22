@@ -119,13 +119,7 @@ const userHome = async (req, res) => {
   }
 };
 
-const products_page = async (req, res) => {
-  try {
-    res.render("products");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+
 
 const user_login = async (req, res) => {
   try {
@@ -158,11 +152,10 @@ const auth_user = async (req, res) => {
     const logEmail = req.body.email;
     const logPassowrd = req.body.password;
     const dbData = await User.findOne({ email: logEmail });
-    if (dbData.isBlocked == true) {
-      res.render("userLogin", { message: "you are restricted" });
-    } else {
       if (!dbData) {
         res.render("userLogin", { message: "wrong email please try again" });
+      }else if(dbData.isBlocked == true){
+       res.render('userLogin',{message:"you are restricted"})
       } else {
         const comparePassword = await bcrypt.compare(
           logPassowrd,
@@ -176,7 +169,7 @@ const auth_user = async (req, res) => {
           res.render("userLogin", { message: "the password is incorrect" });
         }
       }
-    }
+    
   } catch (error) {
     console.log(error.message);
   }
@@ -191,54 +184,6 @@ const user_logout = async (req, res) => {
   }
 };
 
-const show_sofa = async (req, res) => {
-  try {
-    const dbData = await Product.find({ category: "Sofa" });
-    res.render("shop", { dbData: dbData });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const show_sideBoard = async (req, res) => {
-  try {
-    const dbData = await Product.find({ category: "Sideboard" });
-    res.render("shop", { dbData: dbData });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const show_lampLight = async (req, res) => {
-  try {
-    const dbData = await Product.find({ category: "Lamp light" });
-    // console.log(dbData);
-    res.render("shop", { dbData: dbData });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-// const otp_page = (req,res)=>{
-//   try {
-//     otp_resend()
-//     res.render('otpVerifyer');
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-
-// }
-
-const product_details = async (req, res) => {
-  try {
-    const produtc_id = req.params.id;
-    const dbData = await Product.find({ _id: produtc_id });
-    // console.log(dbData);
-    res.render("productDetail", { dbData: dbData });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
 
 module.exports = {
   user_login,
@@ -249,10 +194,5 @@ module.exports = {
   userHome,
   user_logout,
   otp_resend,
-  // otp_page,
-  products_page,
-  product_details,
-  show_sofa,
-  show_sideBoard,
-  show_lampLight,
+
 };

@@ -31,7 +31,7 @@
         </div>
         <nav>
             <ul class="menu-aside ">
-                <li class="menu-item   ">
+                <li class="menu-item ">
                     <a class="menu-link" href="/admin/adminHome">
                         <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
@@ -43,14 +43,14 @@
                         <span class="text">Products</span>
                     </a>
                 </li>
-                <li class="menu-item active ">
+                <li class="menu-item  active">
                     <a class="menu-link" href="/admin/users1">
                         <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">User Controler</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="/admin/order-list1">
+                    <a class="menu-link" href="/admin/show-orders">
                         <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
@@ -60,6 +60,12 @@
                     <a class="menu-link" href="/admin/add-product">
                         <i class="icon material-icons md-add_box"></i>
                         <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/categoryManegement">
+                        <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Category</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -116,12 +122,12 @@
                         <input list="search_terms" type="text" class="form-control" placeholder="Search term" />
                         <button class="btn btn-light bg" type="button"><i class="material-icons md-search"></i></button>
                     </div>
-                    <datalist id="search_terms">
+                    <!-- <datalist id="search_terms">
                         <option value="Products"></option>
                         <option value="New orders"></option>
                         <option value="Apple iphone"></option>
                         <option value="Ahmed Hassan"></option>
-                    </datalist>
+                    </datalist> -->
                 </form>
             </div>
             <div class="col-nav">
@@ -181,23 +187,25 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Order List</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <h2 class="content-title card-title">User List</h2>
+                    <p>User list to control users</p>
                 </div>
                 <div>
                     <input type="text" placeholder="Search order ID" class="form-control bg-white" />
                 </div>
             </div>
             <div>
-                <% if (typeof message !== "undefined") { %>
-                    <p style="color: green;"><%= message  %></p>
-              <%  } %>
+                <% if (typeof message !=="undefined" ) { %>
+                    <p style="color: rgb(253, 0, 0);">
+                        <%= message %>
+                    </p>
+                    <% } %>
             </div>
             <div class="card mb-4">
                 <header class="card-header">
                     <div class="row gx-3">
                         <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control" />
+                            <input type="text" placeholder="Search..." class="form-control" id="searched" />
                         </div>
                         <!-- <div class="col-lg-2 col-6 col-md-3">
                             <select class="form-select">
@@ -232,36 +240,42 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% if (typeof dbData !== "undefined") { %>
-                                    
-                             
-                                <% dbData.forEach(element=> { %>
-                                    <tr>
+                                <% if (typeof dbData !=="undefined" ) { %>
 
-                                        <td></td>
-                                        <td><b>
-                                                <%= element.name %>
-                                            </b></td>
-                                        <td>
-                                            <%= element.email %>
-                                        </td>
-                                        <td>$9.00</td>
-                                        <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                                        <% const date = new Date(element.Date); %>
-                                        <% const formattedDate = date.toISOString().split('T')[0]; %>
-                                        <td><%=  formattedDate  %></td>
-                                        <td class="text-end">
-                                            <% if (element.isBlocked == true) { %>
-                                            <a href="unblock/<%= element._id  %>" class="btn btn-md rounded font-sm" style="background-color: red;">Unblock</a>
-                                           
-                                            <!-- dropdown //end -->
-                                        </td>
-                                        <%  }else { %>
-                                            <a href="block/<%= element._id  %>" class="btn btn-md rounded font-sm" style="background-color: red;">Block</a>
-                                        <% } %>
-                                    </tr>
-                                    <% }); %>
-                                    <%  } %>
+
+                                    <% dbData.forEach(element=> { %>
+                                        <tr>
+
+                                            <td></td>
+                                            <td><b>
+                                                    <%= element.name %>
+                                                </b></td>
+                                            <td>
+                                                <%= element.email %>
+                                            </td>
+                                            <td>$9.00</td>
+                                            <td><span class="badge rounded-pill alert-warning">Pending</span></td>
+                                            <% const date=new Date(element.Date); %>
+                                                <% const formattedDate=date.toISOString().split('T')[0]; %>
+                                                    <td>
+                                                        <%= formattedDate %>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <% if (element.isBlocked==true) { %>
+                                                            <button onclick="blockUser(this,'<%= element._id %>')"
+                                                                class="btn btn-md rounded font-sm"
+                                                                style="background-color: green;">Unblock</button>
+
+                                                            <!-- dropdown //end -->
+                                                    </td>
+                                                    <% }else { %>
+                                                        <button onclick="blockUser(this,'<%= element._id %>')"
+                                                            class="btn btn-md rounded  font-sm"
+                                                            style="background-color: red;">Block</button>
+                                                        <% } %>
+                                        </tr>
+                                        <% }); %>
+                                            <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -292,10 +306,12 @@
                     <script>
                         document.write(new Date().getFullYear());
 
-                        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-                        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-                            return new bootstrap.Dropdown(dropdownToggleEl)
-                        });
+                        // var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+                        // var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                        //     return new bootstrap.Dropdown(dropdownToggleEl)
+                        // });
+                     
+
 
                     </script>
                     &copy; Nest - HTML Ecommerce Template .
@@ -306,13 +322,15 @@
             </div>
         </footer>
     </main>
-    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/vendors/select2.min.js"></script>
-    <script src="assets/js/vendors/perfect-scrollbar.js"></script>
-    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/assets/js/script.js"></script>
+    <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/vendors/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
-    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+    <script src="/assets/js/main.js?v=1.1" type="text/javascript"></script>
 </body>
 
 </html>
