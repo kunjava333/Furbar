@@ -16,6 +16,7 @@
     <!-- Template CSS -->
     <link href="/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
 </head>
+<script src="/assets/js/script.js"></script>
 
 <body class="dark">
     <div class="screen-overlay"></div>
@@ -201,33 +202,34 @@
                     </p>
                     <% } %>
             </div>
+            <% if (typeof dbData !=="undefined") { %>
             <div class="card mb-4">
                 <header class="card-header">
                     <div class="row gx-3">
                         <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control" id="searched" />
+                            <input type="text" class="search form-control" placeholder="What you looking for?" name="search" id="searchInput">
                         </div>
-                        <!-- <div class="col-lg-2 col-6 col-md-3">
+                        <div class="col-lg-2 col-6 col-md-3">
                             <select class="form-select">
                                 <option>Status</option>
                                 <option>Active</option>
                                 <option>Disabled</option>
                                 <option>Show all</option>
                             </select>
-                        </div> -->
-                        <!-- <div class="col-lg-2 col-6 col-md-3">
+                        </div> 
+                         <div class="col-lg-2 col-6 col-md-3">
                             <select class="form-select">
                                 <option>Show 20</option>
                                 <option>Show 30</option>
                                 <option>Show 40</option>
                             </select>
-                        </div> -->
+                        </div>
                     </div>
                 </header>
                 <!-- card-header end// -->
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover user-list" id="userTable">
                             <thead>
                                 <tr>
                                     <th>#ID</th>
@@ -239,37 +241,37 @@
                                     <th scope="col" class="text-end">Action</th>
                                 </tr>
                             </thead>
+                            
                             <tbody>
-                                <% if (typeof dbData !=="undefined" ) { %>
 
 
-                                    <% dbData.forEach(element=> { %>
+                                    <% dbData.forEach(data=> { %>
                                         <tr>
 
                                             <td></td>
                                             <td><b>
-                                                    <%= element.name %>
+                                                    <%= data.name %>
                                                 </b></td>
                                             <td>
-                                                <%= element.email %>
+                                                <%= data.email %>
                                             </td>
                                             <td>$9.00</td>
                                             <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                                            <% const date=new Date(element.Date); %>
+                                            <% const date=new Date(data.Date); %>
                                                 <% const formattedDate=date.toISOString().split('T')[0]; %>
                                                     <td>
                                                         <%= formattedDate %>
                                                     </td>
                                                     <td class="text-end">
-                                                        <% if (element.isBlocked==true) { %>
-                                                            <button onclick="blockUser(this,'<%= element._id %>')"
+                                                        <% if (data.isBlocked==true) { %>
+                                                            <button onclick="blockUser(this,'<%= data._id %>')"
                                                                 class="btn btn-md rounded font-sm"
                                                                 style="background-color: green;">Unblock</button>
 
                                                             <!-- dropdown //end -->
                                                     </td>
                                                     <% }else { %>
-                                                        <button onclick="blockUser(this,'<%= element._id %>')"
+                                                        <button onclick="blockUser(this,'<%= data._id %>')"
                                                             class="btn btn-md rounded  font-sm"
                                                             style="background-color: red;">Block</button>
                                                         <% } %>
@@ -310,10 +312,36 @@
                         // var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
                         //     return new bootstrap.Dropdown(dropdownToggleEl)
                         // });
-                     
+                       
+
 
 
                     </script>
+                    <script>
+
+  
+                        document.addEventListener('DOMContentLoaded', function () {
+                          let searchInput=document.getElementById('searchInput');
+                      
+                          searchInput.addEventListener('keyup', function () {
+                            let searchTerm=searchInput.value.toLowerCase();
+                            let tableRows=document.querySelectorAll('#userTable tbody tr');
+                      
+                            tableRows.forEach(function (row) {
+                              let nameColumn=row.querySelector('td:nth-child(2) '); // Adjust the index based on your table structure
+                      
+                              if (nameColumn) {
+                                let nameText=nameColumn.textContent.toLowerCase();
+                                row.style.display=nameText.includes(searchTerm) ? '' : 'none';
+                              }
+                            });
+                          });
+                        });
+                      
+                      
+                      
+                      
+                      </script>
                     &copy; Nest - HTML Ecommerce Template .
                 </div>
                 <div class="col-sm-6">
@@ -322,7 +350,6 @@
             </div>
         </footer>
     </main>
-    <script src="/assets/js/script.js"></script>
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/vendors/select2.min.js"></script>

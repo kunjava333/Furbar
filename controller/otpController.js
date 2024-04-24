@@ -1,43 +1,6 @@
 const nodemailer = require("nodemailer");
 const otpGenerator = require('otp-generator')
 
-// const send_otp = async (email) => {  
-//   try {
-//         // res.render('otpVerifyer')
-//         let testAccount = await nodemailer.createTestAccount()
-//     const otp = Math.floor(Math.random() * 10000);
-//     console.log(otp);
-//     console.log('things working ');
-//     console.log(email);
-//     const transporter = nodemailer.createTransport({
-//       host: "smtp.gmail.com",
-//       port :405,
-//       secure: true,
-//       auth: {
-//         user: "vaseemformoney@gmail.com",
-//         pass: "qdhltmtguqlmwavf",
-//       },
-//     });
-//     const mailOption = {
-//         from: 'vaseemformoney@gmail.com',
-//         to: email , 
-//         subject: "This is your otp for Furbar Otp verification",
-//         text: `This is your Otp ${otp}`, 
-//         html: "<h4>Buddy you are alive</h4>",
-//     }
-
-// //      transporter.sendMail({mailOption,function(error,info) {
-// //         if(error){
-// //                 console.log(error);
-// //         }else{
-// //                 console.log(`mail is has send to ${info}`);
-// //         }
-// //      } });
-//   } catch (error) {     
-//     console.log(error.message);
-//   }
-// };
-
 let gloabal = null;
 
 const sendMail = (email, otp) => {

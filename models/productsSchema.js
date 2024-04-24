@@ -52,6 +52,10 @@ const productSchema = new mongoose.Schema({
     },blockProduct:{
         type:Boolean,
         required:true
+    },
+    stock:{
+        type:Number,
+        required:true
     }
 })
 

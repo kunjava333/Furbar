@@ -9,7 +9,7 @@ userRoute.use(express.json());
 userRoute.use(express.urlencoded({extended:true}))
 userRoute.use(session({
     secret: 'your-secret-here',
-    resave: false,
+    resave: true,
     saveUninitialized: true
   }));;
 
@@ -42,12 +42,24 @@ userRoute.get('/newOtp',userController.otp_resend);
 
 
 //Products
-// userRoute.get('/produts',productController.products_page);
 userRoute.get('/product_details/:id',productController.product_details);
 userRoute.get('/showProduct-user/:category',productController.show_products_user);
-// userRoute.get('/showSofa',productController.show_sofa);
-// userRoute.get('/showLamplight',productController.show_lampLight);
 
+
+//ABOUT USER
+userRoute.get('/about-user',userController.aboutUser);
+userRoute.post('/update-user-info',userController.update_user_info);
+
+//ADD ADRESS
+userRoute.get('/add-address-page',userController.add_address_page);
+userRoute.post('/add-address',userController.add_address);
+userRoute.get('/delete-address/:id',userController.address_delete);
+userRoute.get('/edit-address/:id',userController.edit_address_page);
+userRoute.post('/update-address',userController.edit_address);
+
+
+//ADD TO CART
+userRoute.get('/add-to-cart/:id',productController.add_to_cart);
 
 
 module.exports = userRoute;

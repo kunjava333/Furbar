@@ -1,6 +1,8 @@
 // const User = require("../models/usersSchema");
 const Product = require("../models/productsSchema");
 const Category = require('../models/categorySchema')
+const Cart = require('../models/cartSchema');
+
 //USER SIDE OF CONTROLING PRODUCT
 
 const show_products_user = async (req,res)=>{
@@ -17,6 +19,15 @@ const show_products_user = async (req,res)=>{
 }
 
 
+const add_to_cart = async (req,res)=>{
+    try {
+        const id = req.params.id
+        console.log(req.session);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 const show_lampLight = async (req, res) => {
@@ -42,7 +53,7 @@ const product_details = async (req, res) => {
   // ADMIN SIDE OF CTROLING PRODUCT
 const add_product = async (req,res)=>{
     try {
-        
+        console.log(req.body);
      const product = new Product({
         title:req.body.title,
         description:req.body.description,
@@ -55,6 +66,7 @@ const add_product = async (req,res)=>{
         shippingFee:req.body.shippingFee,
         category:req.body.category,
         blockProduct:false,
+        stock:req.body.stock
      })
     
     
@@ -164,6 +176,11 @@ const product_delete = async (req,res)=>{
         console.log(error.message);
     }
 }
+
+
+
+
+
 module.exports = {
     // USER PRODUCT CONTROLERS
     product_details,
@@ -176,6 +193,7 @@ module.exports = {
     product_delete,
     product_grid,
     unblock_product,
-    block_product
+    block_product,
+    add_to_cart
    
 }

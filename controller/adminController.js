@@ -7,24 +7,24 @@ const admin_auth = async (req,res)=>{
     try {
        const adminEmail = req.body.email;
        const adminPassword = req.body.password;
-        if(adminEmail == process.env.email && adminPassword == process.env.password){
+       console.log(adminEmail);
+        if(adminEmail == process.env.EMAIL && adminPassword == process.env.PASSWORD){
             console.log('its here');
             req.session.email = process.env.email;
             res.redirect('/admin/adminHome')
          
             // res.redirect('/admin/adminHome');
-        }else if(adminEmail !== process.env.email || adminPassword !== process.env.password){
-            console.log('its here in else');
+        }else if(adminEmail !== process.env.EMAIL || adminPassword !== process.env.PASSWORD){
+            console.log(process.env.EMAIL);
+            console.log('its here in else')
+
             res.render('adminLogin',{message:'wrong email or password'});
         }
           
-            
     } catch (error) {
         console.log(error.message); 
     }
 }
-
-
 
 
 //USER CONTROLER

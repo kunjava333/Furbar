@@ -1,7 +1,7 @@
 const User = require("../models/usersSchema");
 const bcrypt = require("bcrypt");
 const Otp = require("../controller/otpController");
-const Product = require("../models/productsSchema");
+const Address = require("../models/addressSchema");
 
 const hashPassword = async (password) => {
   try {
@@ -38,7 +38,7 @@ const Ecompare = async (email1) => {
 
 const user_register = async (req, res) => {
   try {
-    res.render("userRegister");
+    res.render("addAddress");
   } catch (error) {
     console.log(error.message);
   }
@@ -67,7 +67,7 @@ const create_user = async (req, res) => {
         console.log("they are here");
         req.session.otp = otp;
         setTimeout(()=>{
-          delete req.session.otp
+           req.session.otp = null
         ,60000});
 
         // console.log(req.session.otp);
@@ -111,6 +111,29 @@ const otp_verify = async (req, res) => {
   }
 };
 
+const add_address = async (req,res)=>{
+  try {
+    const {user_id} = req.session
+    const {name,address,country,city,state,pincode,mobile} = req.body;
+    const newAddress = new Address ({
+        user_id:user_id,
+        name:name,
+        address:address,
+        country:country,
+        city:city,
+        state:state,
+        pincode:pincode,
+        mobile:mobile
+    })
+    if(newAddress){
+      newAddress.save()
+      res.render('addAddress',{message:'A new address has been saved'})
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 const userHome = async (req, res) => {
   try {
     res.render("index");
@@ -128,6 +151,90 @@ const user_login = async (req, res) => {
     console.log(error.message);
   }
 };
+
+const aboutUser = async (req,res)=>{
+  try {
+    
+    const {user_id} = req.session
+    const userData = await User.find({_id:user_id})
+    const addressData = await Address.find({user_id:user_id})
+    console.log(userData);
+    console.log(addressData);
+    res.render('userAccount',{userData:userData,address:addressData})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const add_address_page = async (req,res)=>{
+  try {
+    res.render('addAddress')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const address_delete = async (req,res)=>{
+  try {
+    const id = req.params.id
+    const remove = await Address.findByIdAndDelete({_id:id})
+    if(remove){
+      console.log('things are geting here');
+      res.redirect('/about-user')
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const edit_address_page = async (req,res)=>{
+  try {
+    const id = req.params.id
+    const userData = await Address.find({_id:id})
+    res.render('editAddress',{userData:userData})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
+const edit_address = async (req,res)=>{
+  try {
+    const {name,address,country,city,state,pincode,mobile,user_id} = req.body;
+    const change = await Address.findByIdAndUpdate({_id:user_id},{$set:{name:name,address:address,country:country,city:city,state:state,pincode:pincode,mobile:mobile}})
+    if(change){
+      console.log('thins are working here and everywhere');
+      res.redirect('/about-user')
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const update_user_info = async (req,res)=>{
+  try {
+   const {name,email,oldPassword,newPassword,confirmPassword,userId} = req.body
+   const dbData = await User.findById({_id:userId})
+   const password = await hashPassword(newPassword)
+   const comparePassword = await bcrypt.compare(
+    oldPassword,
+    dbData.password
+  );
+   if(comparePassword){
+    const update = await User.findByIdAndUpdate({_id:userId},{$set:{name:name,email:email,password:password}})
+    if(update){
+      res.render('userAccount',{message:'your info has been updated'})
+    }else{
+      res.render('userAccount',{message:'some porblem updating please try again'})
+    }
+   }else{
+    res.render('usetAccount',{message:'your old passowrd is wrong'})
+   }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 const otp_resend = async (req, res) => {
   try {
@@ -164,6 +271,7 @@ const auth_user = async (req, res) => {
 
         if (dbData.email == logEmail && comparePassword) {
           req.session.user_id = dbData._id;
+
           res.redirect("/Home");
         } else if (!comparePassword) {
           res.render("userLogin", { message: "the password is incorrect" });
@@ -194,5 +302,12 @@ module.exports = {
   userHome,
   user_logout,
   otp_resend,
+  aboutUser,
+  update_user_info,
+  add_address_page,
+  add_address,
+  address_delete,
+  edit_address_page,
+  edit_address
 
 };
