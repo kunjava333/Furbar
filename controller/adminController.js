@@ -1,9 +1,9 @@
 require('dotenv').config();
 const User = require("../models/usersSchema");
-const Product = require('../models/productsSchema')
+const Order = require('../models/orderSchema')
 const Category = require('../models/categorySchema')
 
-const admin_auth = async (req,res)=>{
+const adminAuth = async (req,res)=>{
     try {
        const adminEmail = req.body.email;
        const adminPassword = req.body.password;
@@ -28,7 +28,7 @@ const admin_auth = async (req,res)=>{
 
 
 //USER CONTROLER
-const show_user = async (req,res)=>{
+const showUser = async (req,res)=>{
     try {
         
         const dbData =  await User.find({ isAdmin: false });
@@ -42,16 +42,18 @@ const show_user = async (req,res)=>{
 }
 
 //ORDERS
-const show_orders = async (req,res)=>{
+const showOrders = async (req,res)=>{
     try {
-        res.render('ordersPage')
+        const order = await Order.find({})
+        // console.log(order[0]._id);
+        res.render('ordersPage',{orderData:order})
     } catch (error) {
         console.log(error.message);
     }
 }
 
 //ADD PRODUCTS
-const add_products_page = async (req,res)=>{
+const addProductsPage = async (req,res)=>{
     try {
         const dbData = await Category.find({})
         res.render('addProduct',{dbData});
@@ -61,7 +63,7 @@ const add_products_page = async (req,res)=>{
 }
 
 //ADMIN LOGIN
-const admin_login = async (req,res)=>{
+const adminLogin = async (req,res)=>{
     try {
     res.render('adminLogin');
         
@@ -85,7 +87,7 @@ const adminHome = async (req,res)=>{
 
 const logout = async (req,res)=>{
     try {
-        delete req.session.email
+        req.session.email = null;
         res.redirect('/admin/admin')
     } catch (error) {
         console.log(error.message);
@@ -93,7 +95,7 @@ const logout = async (req,res)=>{
 }
 
 
-const block_user = async (req,res)=>{
+const blockUser = async (req,res)=>{
     try {
         const user_id = req.params.id
         const check = await User.findByIdAndUpdate({_id:user_id},{$set:{isBlocked:true}})
@@ -103,7 +105,7 @@ const block_user = async (req,res)=>{
     }
 }
 
-const unblock_user = async (req,res)=>{
+const unblockUser = async (req,res)=>{
     try {
         const user_id = req.params.id
         console.log(user_id);
@@ -115,16 +117,30 @@ const unblock_user = async (req,res)=>{
     }
 }
 
-module.exports = {
-    admin_login,
-    admin_auth,
-    adminHome,
-    show_user,
-    show_orders,
-    add_products_page,
-    block_user,
-    unblock_user,
-    logout,
+const orderDetails = async (req,res)=>{
+    try {
+        const {id} = req.query
+        console.log(id);
+        const detail = await Order.findById({_id:id}).populate('items.productId')
+        console.log(detail.items[0].productId);
+        res.render('orderDetails',{detailData:detail})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
+
+
+module.exports = {
+    adminLogin,
+    adminAuth,
+    adminHome,
+    showUser,
+    showOrders,
+    addProductsPage,
+    blockUser,
+    unblockUser,
+    logout,
+    orderDetails
 }
 

@@ -2,7 +2,9 @@ const User = require("../models/usersSchema");
 const bcrypt = require("bcrypt");
 const Otp = require("../controller/otpController");
 const Address = require("../models/addressSchema");
-
+const Order = require('../models/orderSchema')
+const Cart = require('../models/cartSchema')
+const Prodcut = require('../models/productsSchema.js')
 const hashPassword = async (password) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -36,15 +38,15 @@ const Ecompare = async (email1) => {
   }
 };
 
-const user_register = async (req, res) => {
+const userRegister = async (req, res) => {
   try {
-    res.render("addAddress");
+    res.render("userRegisger");
   } catch (error) {
     console.log(error.message);
   }
 };
 
-const create_user = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     // let Pcheck = await Pcompare(req.body.password, req.body.Cpassword);
     let Echeck = await Ecompare(req.body.email);
@@ -69,11 +71,6 @@ const create_user = async (req, res) => {
         setTimeout(()=>{
            req.session.otp = null
         ,60000});
-
-        // console.log(req.session.otp);
-        // setTimeout(()=>{
-        //   delete req.session.otp
-        // },60000)
         res.render("otpVerifyer");
       } else {
         console.log("Problem in storing otp in session ");
@@ -89,7 +86,7 @@ const create_user = async (req, res) => {
   }
 };
 
-const otp_verify = async (req, res) => {
+const otpVerify = async (req, res) => {
   try {
     const Otp = req.body.otp1.join("");
     // console.log(req.session)
@@ -99,7 +96,7 @@ const otp_verify = async (req, res) => {
       await user.save();
       const dbData = await User.findOne({ email: user.email });
       req.session.user_id = dbData._id;
-      delete req.session.userData;
+      req.session.userData = null
       res.redirect("/Home");
     } else {
       res.render("userRegister", {
@@ -111,7 +108,7 @@ const otp_verify = async (req, res) => {
   }
 };
 
-const add_address = async (req,res)=>{
+const addAddress = async (req,res)=>{
   try {
     const {user_id} = req.session
     const {name,address,country,city,state,pincode,mobile} = req.body;
@@ -144,7 +141,7 @@ const userHome = async (req, res) => {
 
 
 
-const user_login = async (req, res) => {
+const userLogin = async (req, res) => {
   try {
     res.render("userLogin");
   } catch (error) {
@@ -154,19 +151,24 @@ const user_login = async (req, res) => {
 
 const aboutUser = async (req,res)=>{
   try {
-    
     const {user_id} = req.session
-    const userData = await User.find({_id:user_id})
-    const addressData = await Address.find({user_id:user_id})
-    console.log(userData);
-    console.log(addressData);
-    res.render('userAccount',{userData:userData,address:addressData})
+    const user = await User.find({_id:user_id})
+    const address = await Address.find({user_id:user_id})
+    const order = Order.find({user_id:user_id})
+    // console.log(userData);
+    // console.log(addressData);
+    const data={
+      userData:user,
+      addressData:address,
+      orderData:order
+    }
+    res.render('userAccount',{allData:data})
   } catch (error) {
     console.log(error.message);
   }
 }
 
-const add_address_page = async (req,res)=>{
+const addAddressPage = async (req,res)=>{
   try {
     res.render('addAddress')
   } catch (error) {
@@ -174,7 +176,7 @@ const add_address_page = async (req,res)=>{
   }
 }
 
-const address_delete = async (req,res)=>{
+const addressDelete = async (req,res)=>{
   try {
     const id = req.params.id
     const remove = await Address.findByIdAndDelete({_id:id})
@@ -187,7 +189,7 @@ const address_delete = async (req,res)=>{
   }
 }
 
-const edit_address_page = async (req,res)=>{
+const editAddressPage = async (req,res)=>{
   try {
     const id = req.params.id
     const userData = await Address.find({_id:id})
@@ -199,7 +201,7 @@ const edit_address_page = async (req,res)=>{
 
 
 
-const edit_address = async (req,res)=>{
+const editAddress = async (req,res)=>{
   try {
     const {name,address,country,city,state,pincode,mobile,user_id} = req.body;
     const change = await Address.findByIdAndUpdate({_id:user_id},{$set:{name:name,address:address,country:country,city:city,state:state,pincode:pincode,mobile:mobile}})
@@ -212,31 +214,32 @@ const edit_address = async (req,res)=>{
   }
 }
 
-const update_user_info = async (req,res)=>{
+const updateUserInfo = async (req,res)=>{
   try {
-   const {name,email,oldPassword,newPassword,confirmPassword,userId} = req.body
-   const dbData = await User.findById({_id:userId})
+    const {user_id} = req.session
+   const {name,email,oldPassword,newPassword,confirmPassword} = req.body
+   const dbData = await User.findById({_id:user_id})
    const password = await hashPassword(newPassword)
    const comparePassword = await bcrypt.compare(
     oldPassword,
     dbData.password
   );
    if(comparePassword){
-    const update = await User.findByIdAndUpdate({_id:userId},{$set:{name:name,email:email,password:password}})
+    const update = await User.findByIdAndUpdate({_id:user_id},{$set:{name:name,email:email,password:password}})
     if(update){
       res.render('userAccount',{message:'your info has been updated'})
     }else{
       res.render('userAccount',{message:'some porblem updating please try again'})
     }
    }else{
-    res.render('usetAccount',{message:'your old passowrd is wrong'})
+    res.render('userAccount',{message:'your old passowrd is wrong'})
    }
   } catch (error) {
     console.log(error.message);
   }
 }
 
-const otp_resend = async (req, res) => {
+const otpResend = async (req, res) => {
   try {
     const { email } = req.session.userData;
     // console.log(email);
@@ -244,7 +247,7 @@ const otp_resend = async (req, res) => {
     // console.log(email);
     const otp = Otp.sendOtp(email);
     console.log(`your new otp ${otp}`);
-    delete req.session.otp;
+    req.session.otp = null;
     // console.log(req.session.otp);
     req.session.otp = otp;
     console.log(req.session.otp);
@@ -254,7 +257,7 @@ const otp_resend = async (req, res) => {
   }
 };
 
-const auth_user = async (req, res) => {
+const authUser = async (req, res) => {
   try {
     const logEmail = req.body.email;
     const logPassowrd = req.body.password;
@@ -283,7 +286,7 @@ const auth_user = async (req, res) => {
   }
 };
 
-const user_logout = async (req, res) => {
+const userLogout = async (req, res) => {
   try {
     req.session.destroy();
     res.redirect("/");
@@ -293,21 +296,79 @@ const user_logout = async (req, res) => {
 };
 
 
-module.exports = {
-  user_login,
-  user_register,
-  create_user,
-  auth_user,
-  otp_verify,
-  userHome,
-  user_logout,
-  otp_resend,
-  aboutUser,
-  update_user_info,
-  add_address_page,
-  add_address,
-  address_delete,
-  edit_address_page,
-  edit_address
+const show_orders = async (req,res)=>{
+  try {
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
+const placeOrder = async (req,res)=>{
+  try {
+    const {name,country,address,city,district,pincode,mobile,email} = req.body
+    const {user_id} = req.session
+    const cart = await Cart.findOne({user_id:user_id})
+    const array = cart.orders
+    console.log(array[0]);
+    const order = new Order({
+      user_id:user_id,
+      items:[{
+        productId:array[0].productId,
+        quantity:array[0].quantity,
+        total:array[0].total
+      }],
+      date: new Date(),
+      status:'pinding',
+      email:email,
+      address:{
+        name:name,
+        address:address,
+        country:country,
+        city:city,
+        district:district,
+        pincode:pincode,
+        mobile:mobile
+      },
+      paymentMethod:'cash on delivery'
+    })
+     
+    const ordered = order.save()
+    if(ordered){
+      if(array.length>1){
+        for(let i=1;i<array.length;i++){
+          const update = await Order.findOneAndUpdate({user_id:user_id },{ $push: { items: { productId: array[i].productId, quantity: array[i].quantity ,total:array[i].total} } })
+  
+        }
+      }
+      await Cart.findOneAndDelete({_id:cart._id})
+      setTimeout(()=>{
+        res.redirect('/')
+
+      },2100)
+      
+    }
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+module.exports = {
+  userLogin,
+  userRegister,
+  createUser,
+  authUser,
+  otpVerify,
+  userHome,
+  userLogout,
+  otpResend,
+  aboutUser,
+  updateUserInfo,
+  addAddressPage,
+  addAddress,
+  addressDelete,
+  editAddressPage,
+  editAddress,
+  placeOrder
 };

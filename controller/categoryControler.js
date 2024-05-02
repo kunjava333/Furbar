@@ -4,7 +4,7 @@ const Category = require("../models/categorySchema");
 
 
 //SHOWING CATEGORY PAGE
-const category_page = async (req, res) => {
+const categoryPage = async (req, res) => {
   try {
     const dbData = await Category.find({});
 
@@ -19,7 +19,7 @@ const category_page = async (req, res) => {
 
 
 //SHOWING ADD CATEGORY
-const add_category_page = async (req, res) => {
+const addCategoryPage = async (req, res) => {
   try {
     res.render("addCategory");
   } catch (error) {
@@ -31,7 +31,7 @@ const add_category_page = async (req, res) => {
 
 
 //ADDING CATEGORY
-const add_category = async (req, res) => {
+const addCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
     const regexPattern = new RegExp(`^${name}$`,'i')
@@ -65,7 +65,7 @@ const add_category = async (req, res) => {
 
 
 //UNLISTING CATEGORY
-const unlist_category = async (req, res) => {
+const unlistCategory = async (req, res) => {
   try {
     const category_id = req.params.id;
     const check = await Category.findByIdAndUpdate(category_id, {
@@ -82,7 +82,7 @@ const unlist_category = async (req, res) => {
 
 
 //LISTING CATEGORY
-const list_category = async (req, res) => {
+const listCategory = async (req, res) => {
   try {
     const category_id = req.params.id;
     const check = await Category.findByIdAndUpdate(category_id, {
@@ -95,9 +95,9 @@ const list_category = async (req, res) => {
 };
 
 module.exports = {
-  category_page,
-  add_category_page,
-  add_category,
-  unlist_category,
-  list_category,
+  categoryPage,
+  addCategoryPage,
+  addCategory,
+  unlistCategory,
+  listCategory,
 };

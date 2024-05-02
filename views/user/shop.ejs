@@ -491,7 +491,7 @@
                 <div class="shop-top-bar">
                     <div class="shop-text">
                         <p>
-                            <span>12</span> Product Found of <span>30</span>
+                            <span><%= dbData.length %></span> Product Found of <span><%= dbData.length %></span>
                         </p>
                     </div>
                     <div class="shop-tabs">
@@ -538,17 +538,17 @@
                                                         table</a>
                                                 </h4>
                                                 <div class="price">
-                                                    <span class="sale-price">$40.00</span>
+                                                    <span class="sale-price">$<%= element.price %></span>
                                                 </div>
                                             </div>
                                             <ul class="product-meta">
-                                                <li>
+                                                <!-- <li>
                                                     <a class="action" data-bs-toggle="modal" data-bs-target="#quickView"
                                                         href="#"><i class="pe-7s-search"></i></a>
                                                 </li>
                                                 <li>
                                                     <a class="action" href="#"><i class="pe-7s-shopbag"></i></a>
-                                                </li>
+                                                </li> -->
                                                 <li>
                                                     <a class="action" href="#"><i class="pe-7s-like"></i></a>
                                                 </li>

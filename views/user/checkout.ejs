@@ -129,15 +129,10 @@
                 ><i class="pe-7s-like"></i
               ></a>
 
-              <div class="dropdown">
-                <a
-                  class="action"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                >
+              <div class="">
+                <a class="action" href="/cart" role="button">
                   <i class="pe-7s-shopbag"></i>
-                  <span class="number">3</span>
+                  <span class="number"></span>
                 </a>
 
                 <div class="dropdown-menu dropdown-cart">
@@ -482,6 +477,7 @@
                       <li><a href="cart.html">Cart</a></li>
                       <li><a href="wishlist.html">Wishlist</a></li>
                       <li><a href="checkout.html">Checkout</a></li>
+                      <li><a href="my-account.html">My Account</a></li>
                     </ul>
                   </li>
 
@@ -587,11 +583,11 @@
       <div class="container">
         <!-- Page Banner Content End -->
         <div class="page-banner-content">
-          <h2 class="title">My Account</h2>
+          <h2 class="title">Checkout</h2>
 
           <ul class="breadcrumb">
             <li><a href="index.html">Home</a></li>
-            <li class="active">My Account</li>
+            <li class="active">Checkout</li>
           </ul>
         </div>
         <!-- Page Banner Content End -->
@@ -599,273 +595,472 @@
     </div>
     <!-- Page Banner Section End -->
 
-    <!-- My Account Section Start -->
+    <!-- Checkout Section Start -->
     <div class="section section-padding">
       <div class="container">
-        <div class="row gy-4">
-          <div class="col-xl-3 col-md-4">
-            <!-- My Account Menu Start -->
-            <div class="my-account-menu">
-              <ul class="nav account-menu-list flex-column">
-                <li>
-                  <a
-                    class="active"
-                    data-bs-toggle="pill"
-                    href="#pills-dashboard"
-                    ><i class="fa fa-tachometer"></i> Dashboard</a
-                  >
-                </li>
-                <li>
-                  <a data-bs-toggle="pill" href="#pills-order" onclick="order()"
-                    ><i class="fa fa-shopping-cart"></i> Order</a
-                  >
-                </li>
-                <li>
-                  <a data-bs-toggle="pill" href="#pills-download"
-                    ><i class="fa fa-cloud-download"></i> Download</a
-                  >
-                </li>
-                <li>
-                  <a data-bs-toggle="pill" href="#pills-payment"
-                    ><i class="fa fa-credit-card"></i> Payment Method</a
-                  >
-                </li>
-                <li>
-                  <a data-bs-toggle="pill" href="#pills-address"
-                    ><i class="fa fa-map-marker"></i> Address</a
-                  >
-                </li>
-                <li>
-                  <a data-bs-toggle="pill" href="#pills-account"
-                    ><i class="fa fa-user"></i> Account Details</a
-                  >
-                </li>
-                <li>
-                  <a href="login.html"><i class="fa fa-sign-out"></i> Logout</a>
-                </li>
-              </ul>
+        <!-- <div class="checkout-info">
+          <p class="info-header error">
+            <i class="fa fa-exclamation-circle"></i>
+            <strong>Error:</strong> Username is required.
+          </p>
+        </div> -->
+
+        <!-- <div class="checkout-info">
+          <p class="info-header">
+            <i class="fa fa-exclamation-circle"></i> Returning customer?
+            <a data-bs-toggle="collapse" href="#login">Click here to login</a>
+          </p>
+
+          <div class="collapse" id="login">
+            <div class="card-body">
+              <p>
+                If you have shopped with us before, please enter your details in
+                the boxes below. If you are a new customer, please proceed to
+                the Billing & Shipping section.
+              </p>
+               <form action="#">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="single-form"> -->
+        <!-- <input type="email" placeholder="Username or email *" />
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="single-form">
+                      <input type="password" placeholder="Password" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="single-form d-flex align-items-center">
+                  <button class="btn btn-primary btn-hover-dark">Login</button>
+                  <div class="form-checkbox">
+                    <input type="checkbox" id="remember" />
+                    <label for="remember"><span></span> Remember Me</label>
+                  </div>
+                </div>
+                <div class="forget">
+                  <a href="#">Lost Your Password</a>
+                </div>
+              </form> 
             </div>
-            <!-- My Account Menu End -->
           </div>
-          <div class="col-xl-9 col-md-8">
-            <!-- Tab content start -->
-            <div class="tab-content my-account-tab">
-              <% if(typeof allData !== "undefined"){ %>
-              <div class="tab-pane fade show active" id="pills-dashboard">
-                <div class="my-account-dashboard account-wrapper">
-                  <h4 class="account-title">Dashboard</h4>
-                  <div class="welcome-dashboard">
-                    <p>
-                      Hello,
-                      <strong><%= allData.name %></strong> (If Not
-                      <a href="/">Logout</a> )
-                    </p>
-                  </div>
-                  <p>
-                    From your account dashboard. you can easily check & view
-                    your recent orders, manage your shipping and billing
-                    addresses and edit your password and account details.
-                  </p>
-                </div>
-              </div>
-              <% } %>
+        </div> -->
+        <% if(typeof message !== "undefined"){ %>
+        <p style="color: red"><%= message %></p>
+        <% } %> <% if(typeof data !== "undefined"){ %>
 
-              <div class="tab-pane fade" id="pills-order">
-                <div class="my-account-order account-wrapper">
-                  <h4 class="account-title">Orders</h4>
-                  <div class="account-table text-center table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th class="no">No</th>
-                          <th class="name">Name</th>
-                          <th class="date">Date</th>
-                          <th class="status">Status</th>
-                          <th class="total">Total</th>
-                          <th class="action">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
+        <div class="checkout-info">
+          <p class="info-header">
+            <i class="fa fa-exclamation-circle"></i> Have a coupon?
+            <a data-bs-toggle="collapse" href="#coupon"
+              >Click here to enter your code</a
+            >
+          </p>
 
-                        <tr>
-                          <td>1</td>
-                          <td>Mostarizing Oil</td>
-                          <td>Aug 22, 2020</td>
-                          <td>Pending</td>
-                          <td>$100</td>
-                          <td>
-                            <a href="#">View</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="tab-pane fade" id="pills-download">
-                <div class="my-account-download account-wrapper">
-                  <h4 class="account-title">Download</h4>
-                  <div class="account-table text-center table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th class="name">Product</th>
-                          <th class="date">Date</th>
-                          <th class="status">Expire</th>
-                          <th class="action">Download</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Mostarizing Oil</td>
-                          <td>Aug 22, 2020</td>
-                          <td>Yes</td>
-                          <td>
-                            <a href="#">Download File</a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Katopeno Altuni</td>
-                          <td>July 22, 2020</td>
-                          <td>Never</td>
-                          <td>
-                            <a href="#">Download File</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="tab-pane fade" id="pills-payment">
-                <div class="my-account-payment account-wrapper">
-                  <h4 class="account-title">Payment Method</h4>
-                  <p>You Can't Saved Your Payment Method yet.</p>
-                </div>
-              </div>
-
-    
-              <div class="tab-pane fade" id="pills-address">
-                <div class="my-account-address account-wrapper">
-                  <div class="row">
-                    <% allData.addressData.forEach(element => { %>
-                    <div class="col-md-6">
-                      <div class="account-address">
-                        <h4 class="account-title"></h4>
-                        <h6 class="name"><%= element.name %></h6>
-                        <p><%= element.address %>,<%= element.city%>,<br><%= element.state %>,<%= element.country %></p>
-                        <p><%= element.mobile %></p>
-                        <a class="btn btn-primary btn-hover-dark" href="/add-address-page"
-                          ><i class="fa fa-edit"></i>Add Address</a>
-                          <a class="btn btn-primary btn-hover-danger" href="/delete-address/<%= element._id %>"
-                          ><i class="fa fa-edit"></i>Delete </a>
-                          <br>
-                          <a class="btn btn-primary btn-hover-dark" href="/edit-address/<%= element._id %>"
-                            ><i class="fa fa-edit"></i>Edit </a>
-
-                      </div>
+          <div class="collapse" id="coupon">
+            <div class="card-body">
+              <form action="#">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="single-form">
+                      <input type="email" placeholder="Coupon code" />
                     </div>
-                    <% }); %>
-                    </div>
-                </div> 
-              </div> 
-
-
-
-              <div class="tab-pane fade" id="pills-account">
-                <div class="my-account-details account-wrapper">
-                  <h4 class="account-title">Account Details</h4>
-               <form action="/update-user-info" method="post" id="form">
-                  <div class="account-details">
-                    <div class="row">
-                        <% if (typeof message !== "undefined") { %>      
-                        <p style="color: red;"><%= message %></p>
-                       <% } %>
-                       <% if (typeof allData.userData !== "undefined") { %>
-
-
-                      <div class="col-md-9">
-                        <div class="single-form">
-                          <input
-                            type="text"
-                            placeholder="User Name"
-                            value="<%=allData.userData[0].name%>" name="name"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="single-form">
-                          <input
-                            type="text"
-                            placeholder="Email address"
-                            value="<%= allData.userData[0].email %>" name="email"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="single-form">
-                          <h5 class="title">Password change</h5>
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="single-form">
-                          <input
-                            type="password"
-                            placeholder="Current Password"
-                            name="oldPassword"
-                          />
-                        </div>
-                        <input type="hidden" name="userId" value="<%= allData.userData._id %>">
-                      </div>
-                      <div class="col-md-6">
-                        <div class="single-form">
-                          <input
-                            type="password"
-                            placeholder="New Password"
-                            name="newPassword"
-                            id="newPassword"
-                          />
-                        </div>
-                      </div>
-                      <p style="color: red" id="message"></p>
-                      <div class="col-md-6">
-                        <div class="single-form">
-                          <input
-                            type="password"
-                            onkeyup="check()"
-                            placeholder="Confirm Password"
-                            name="confirmPassword"
-                            id="confirmPassword"
-                          />
-                        </div>
-                      </div>
-            </form>
-  <% } %>
-
-
-                      <div class="col-md-6">
-                        <div class="single-form">
-                          <button 
-                            id="formButton"
-                            class="btn btn-primary btn-hover-dark"
-                          >
-                            Save Change
-                          </button>
-                        </div>
-                      </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="single-form">
+                      <button class="btn btn-primary btn-hover-dark">
+                        Coupon
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
-            <!-- Tab content End -->
           </div>
         </div>
+
+        <form action="/order" method="post" id="Form">
+          <div class="row">
+            <div class="col-lg-7">
+              <!-- Checkout Form Start -->
+              <div class="checkout-form">
+                <div class="checkout-title">
+                  <h4 class="title">Billing details</h4>
+                </div>
+                <div class="single-select2">
+                  <div class="form-select2">
+                    <select
+                      class="select2"
+                      name="address_select"
+                      id="address_select"
+                      onchange="updateAddressFields()"
+                    >
+                      <option value="0">Select an address *</option>
+
+                      <% data.address.forEach(element => { %>
+                      <option
+                        id="edkke"
+                        value="<%= element.name %>,<%= element.address  %>,<%= element.city  %>,<%= element.pincode  %>,<%= element.mobile  %>,<%= data.user.email %>"
+                      >
+                        <%= element.address %>
+                      </option>
+                      <% }); %>
+
+                      <!-- Add other address options here if available -->
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="single-form">
+                      <input type="text" value="" name="name" id="name" />
+                    </div>
+                  </div>
+                  <!-- <div class="col-sm-12">
+                                    <div class="single-form">
+                                        <input type="text" placeholder="Company name" />
+                                    </div>
+                                </div> -->
+                  <div class="col-sm-12">
+                    <div class="single-select2">
+                      <div class="form-select2">
+                        <select class="select2" name="country" id="country">
+                          <option value="0">Select a country *</option>
+                          <option value="1">Bangladesh</option>
+                          <option value="2">Canada</option>
+                          <option value="3">Colombia</option>
+                          <option value="4">Indonesia</option>
+                          <option value="5">Italy</option>
+                          <option value="6">Pakistan</option>
+                          <option value="7">Turkey</option>
+                          <option value="7">India</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="single-form">
+                      <label class="form-label">Street address *</label>
+                      <input
+                        type="text"
+                        value="<%= data.address.address %>"
+                        name="address"
+                        id="address"
+                      />
+                      <!-- <input type="text" placeholder="Apartment, suite, unit etc. (optional)" /> -->
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="single-form">
+                      <input
+                        type="text"
+                        value="<%= data.address.city %>"
+                        name="city"
+                        id="city"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="single-select2">
+                      <div class="form-select2">
+                        <select class="select2" name="district" id="district">
+                          <option value="">Select an District *</option>
+                          <option value="BAG">Bagerhat</option>
+                          <option value="BAN">Bandarban</option>
+                          <option value="BAR">Barguna</option>
+                          <option value="BARI">Barisal</option>
+                          <option value="BHO">Bhola</option>
+                          <option value="BOG">Bogra</option>
+                          <option value="BRA">Brahmanbaria</option>
+                          <option value="CHA">Chandpur</option>
+                          <option value="CHI">Chittagong</option>
+                          <option value="CHU">Chuadanga</option>
+                          <option value="COM">Comilla</option>
+                          <option value="COX">Cox's Bazar</option>
+                          <option value="DHA">Dhaka</option>
+                          <option value="DIN">Dinajpur</option>
+                          <option value="FAR">Faridpur</option>
+                          <option value="FEN">Feni</option>
+                          <option value="GAI">Gaibandha</option>
+                          <option value="GAZI">Gazipur</option>
+                          <option value="GOP">Gopalganj</option>
+                          <option value="HAB">Habiganj</option>
+                          <option value="JAM">Jamalpur</option>
+                          <option value="JES">Jessore</option>
+                          <option value="JHA">Jhalokati</option>
+                          <option value="JHE">Jhenaidah</option>
+                          <option value="JOY">Joypurhat</option>
+                          <option value="KHA">Khagrachhari</option>
+                          <option value="KHU">Khulna</option>
+                          <option value="KIS">Kishoreganj</option>
+                          <option value="KUR">Kurigram</option>
+                          <option value="KUS">Kushtia</option>
+                          <option value="LAK">Lakshmipur</option>
+                          <option value="LAL">Lalmonirhat</option>
+                          <option value="MAD">Madaripur</option>
+                          <option value="MAG">Magura</option>
+                          <option value="MAN">Manikganj</option>
+                          <option value="MEH">Meherpur</option>
+                          <option value="MOU">Moulvibazar</option>
+                          <option value="MUN">Munshiganj</option>
+                          <option value="MYM">Mymensingh</option>
+                          <option value="NAO">Naogaon</option>
+                          <option value="NAR">Narail</option>
+                          <option value="NARG">Narayanganj</option>
+                          <option value="NARD">Narsingdi</option>
+                          <option value="NAT">Natore</option>
+                          <option value="NAW">Nawabganj</option>
+                          <option value="NET">Netrakona</option>
+                          <option value="NIL">Nilphamari</option>
+                          <option value="NOA">Noakhali</option>
+                          <option value="PAB">Pabna</option>
+                          <option value="PAN">Panchagarh</option>
+                          <option value="PAT">Patuakhali</option>
+                          <option value="PIR">Pirojpur</option>
+                          <option value="RAJB">Rajbari</option>
+                          <option value="RAJ">Rajshahi</option>
+                          <option value="RAN">Rangamati</option>
+                          <option value="RANP">Rangpur</option>
+                          <option value="SAT">Satkhira</option>
+                          <option value="SHA">Shariatpur</option>
+                          <option value="SHE">Sherpur</option>
+                          <option value="SIR">Sirajganj</option>
+                          <option value="SUN">Sunamganj</option>
+                          <option value="SYL">Sylhet</option>
+                          <option value="TAN">Tangail</option>
+                          <option value="THA">Thakurgaon</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="single-form">
+                      <input type="text" value="" name="pincode" id="pincode" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="single-form">
+                      <input type="text" value="" name="mobile" id="mobile" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="single-form">
+                      <input type="text" value="" name="email" id="email" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="single-form checkbox-checkbox">
+                                <input type="checkbox" id="account" />
+                                <label for="account">
+                                    <span></span> Create an account?</label>
+                            </div>
+
+                            <div class="checkout-account">
+                                <div class="single-form">
+                                    <input type="password" placeholder="Create account Password *" class="form-control" />
+                                </div>
+                            </div> -->
+
+                <!-- <div class="single-form checkbox-checkbox">
+                                <input type="checkbox" id="shipping" />
+                                <label for="shipping">
+                                    <span></span> Ship to a different
+                                    address?</label>
+                            </div> -->
+
+                <div class="single-form checkout-note">
+                  <label class="form-label">Order notes</label>
+                  <textarea
+                    placeholder="Notes about your order, e.g. special notes for delivery."
+                  ></textarea>
+                </div>
+              </div>
+              <!-- Checkout Form End -->
+            </div>
+            <div class="col-lg-5">
+              <div class="checkout-order">
+                <div class="checkout-title">
+                  <h4 class="title">Your Order</h4>
+                </div>
+
+                <div class="checkout-order-table table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="Product-name">Product</th>
+                        <th class="Product-name">Quantity</th>
+                        <th class="Product-price">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% data.cart.orders.forEach(element => { %>
+
+                      <tr>
+                        <td class="Product-name">
+                          <p><%= element.productId.title %></p>
+                        </td>
+                        <td class="Product-name">
+                          <p><%= element.quantity %></p>
+                        </td>
+                        <td class="Product-price">
+                          <p></p>
+                        </td>
+                      </tr>
+
+                      <% }) %>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td class="Product-name">
+                          <p>Subtotal</p>
+                        </td>
+                        <td class="Product-price">
+                          <p>$150.00</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="Product-name">
+                          <p>Shipping</p>
+                        </td>
+                        <td class="Product-price">
+                          <ul class="shipping-list">
+                            <li class="radio">
+                              <input
+                                type="radio"
+                                name="shipping"
+                                id="radio1"
+                                checked
+                              />
+                              <label for="radio1"
+                                ><span></span> Flat Rate</label
+                              >
+                            </li>
+                            <li class="radio">
+                              <input type="radio" name="shipping" id="radio2" />
+                              <label for="radio2"
+                                ><span></span> Free Shipping</label
+                              >
+                            </li>
+                            <li class="radio">
+                              <input type="radio" name="shipping" id="radio3" />
+                              <label for="radio3"
+                                ><span></span> Local Pickup</label
+                              >
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="Product-name">
+                          <p>Total</p>
+                        </td>
+                        <td class="total-price">
+                          <p>$600.00</p>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+
+                <div class="checkout-payment">
+                  <ul>
+                    <li>
+                      <div class="single-payment">
+                        <div class="payment-radio radio">
+                          <input type="radio" name="radio" id="bank" />
+                          <label for="bank"
+                            ><span></span> Direct bank transfer
+                          </label>
+
+                          <div class="payment-details">
+                            <p>
+                              Please send a Check to Store name with Store
+                              Street, Store Town, Store State, Store Postcode,
+                              Store Country.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="single-payment">
+                        <div class="payment-radio radio">
+                          <input type="radio" name="radio" id="check" />
+                          <label for="check"
+                            ><span></span> Check payments
+                          </label>
+
+                          <div class="payment-details">
+                            <p>
+                              Please send a check to Store Name, Store Street,
+                              Store Town, Store State / County, Store Postcode.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="single-payment">
+                        <div class="payment-radio radio">
+                          <input
+                            type="radio"
+                            name="radio"
+                            id="cash"
+                            checked="checked"
+                          />
+                          <label for="cash"
+                            ><span></span> Cash on Delivery</label
+                          >
+
+                          <div class="payment-details">
+                            <p>Pay with cash upon delivery.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="single-payment">
+                        <div class="payment-radio radio">
+                          <input type="radio" name="radio" id="paypal" />
+                          <label for="paypal"
+                            ><span></span> Paypal
+                            <img
+                              class="payment"
+                              src="assets/images/payment-2.html"
+                              alt=""
+                            />
+                            <a href="#">What is PayPal?</a></label
+                          >
+
+                          <div class="payment-details">
+                            <p>
+                              Pay via PayPal; you can pay with your credit card
+                              if you dont have a PayPal account.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div class="single-form">
+                    <a
+                      id="button"
+                      class="btn btn-primary btn-hover-dark d-block"
+                      >Place Order</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
-    <!-- My Account Section End -->
+    <!-- Checkout Section End -->
 
     <!-- Footer Section Start -->
     <div class="section footer-section">
@@ -1060,45 +1255,172 @@
     <!--Back To End-->
     <!-- JS
     ============================================ -->
-<script>
-  function order(){
-    fetch('/show-order')
-    .then(response => {
-      if (response.ok) {
-        return response.json(); 
-      } else {
-        throw new Error('Failed to place order'); 
-      }
-    })
-    .then(data => {
-      
-      console.log('Order placed successfully:', data);
-      data.forEach(element => {
-       tableRowInnerHTML.innerHtml = `
-    <td>${data.productId.title}</td>
-    <td>${productName}</td>
-    <td>${orderDate}</td>
-    <td>${status}</td>
-    <td>${amount}</td>
-    <td>
-     <a href="#">View</a>
-   </td>
-`;
- container.appendChild(tableRowInnerHTML);
+    <script>
+      // Function to validate all input fields
+
+      const validateForm = () => {
+        const name = document.getElementById("name").value;
+        const country1 = document.getElementById("country");
+        const address = document.getElementById("address").value;
+        const city = document.getElementById("city").value;
+        const district = document.getElementById("district").value;
+        console.log(district);
+        const pincode = document.getElementById("pincode").value;
+        const mobile = document.getElementById("mobile").value;
+        const email = document.getElementById("email").value;
+        console.log("this si running ");
+
+        const country = country1.options[country1.selectedIndex];
+
+        const selectedCountryName = country.text;
+        const selectedCountryValue = country.value;
+
+        console.log("Selected Country:", selectedCountryName);
+        console.log("Selected Country Value:", selectedCountryValue);
+
+        // Regex patterns for validation
+        const nameRegex = /^[A-Za-z ]+$/; // Only letters and spaces
+        const countryRegex = /^[A-Za-z ]+$/; // Only letters and spaces
+        const addressRegex = /^[0-9A-Za-z .,/-]+$/; // Alphanumeric with specific characters
+        const cityRegex = /^[A-Za-z ]+$/; // Only letters and spaces
+        const districtRegex = /^[A-Za-z ]+$/; // Only letters and spaces
+        const pincodeRegex = /^\d{6}$/; // Five-digit numeric pincode
+        const mobileRegex = /^\d{10}$/; // Ten-digit numeric mobile number
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Valid email format
+
+        // Validate each field against its corresponding regex pattern
+        const isValidName = nameRegex.test(name);
+        const isValidCountry = countryRegex.test(selectedCountryName);
+        const isValidAddress = addressRegex.test(address);
+        const isValidCity = cityRegex.test(city);
+        const isValidDistrict = districtRegex.test(district);
+        const isValidPincode = pincodeRegex.test(pincode);
+        const isValidMobile = mobileRegex.test(mobile);
+        const isValidEmail = emailRegex.test(email);
+
+        const sweetAlert = (thing) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Please enter a valid ${thing} (letters and spaces only!`,
+          });
+        };
+
+        // Display validation messages if any field is invalid
+        if (!isValidName || !name) {
+          sweetAlert("name");
+          return false;
+        }
+        if (!isValidCountry || !country) {
+          sweetAlert("country");
+          return false;
+        }
+        if (!isValidAddress) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please enter a valid address!",
+          });
+          return false;
+        }
+        if (!isValidCity) {
+          sweetAlert("city");
+          return false;
+        }
+        if (!isValidDistrict) {
+          sweetAlert("district");
+          return false;
+        }
+        if (!isValidPincode) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please enter a valid mobile number (exactly SIX digits)!",
+          });
+          return false;
+        }
+        if (!isValidMobile) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please enter a valid mobile number (exactly TEN digits)!",
+          });
+          return false;
+        }
+        if (!isValidEmail) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please enter a valid email!",
+          });
+          return false;
+        }
+
+        // All fields are valid
+        return true;
+      };
+
+      // Example: Attach the validation function to a form submit event
+      const form = document.getElementById("Form");
+      const button = document.getElementById("button");
+      button.addEventListener("click", (event) => {
+        // Prevent form submission for demonstration
+        const state = validateForm();
+        // Validate the form before submitting
+        if (state == true) {
+          // Form is valid, proceed with form submission (e.g., AJAX request)
+          console.log("Form submitted successfully.");
+          
+          form.submit();
+
+          // Add further logic here (e.g., submit form data via AJAX)
+        } else {
+          event.preventDefault();
+        }
       });
-   
 
-    })
-    .catch(error => {
-      
-      console.error('Error placing order:', error.message);
+      async function updateAddressFields() {
+        const selectElement = document.getElementById("address_select");
+        const value = document.getElementById("edkke").value;
+        const selectedIndex = selectElement.selectedIndex;
+        // const selectedValue = document.getElementById('mySelect').value; // Assuming you get the value this way
 
-    });
-}
+        if (value) {
+          let separator = ","; // Default separator (assuming comma)
+          const hasSpaceAfterComma = value.indexOf(", ") !== -1; // Check for space after comma
 
-  
-</script>
-   
+          if (hasSpaceAfterComma) {
+            separator = ", "; // Update separator if space is present
+          }
+
+          const nameAndAddress = value.split(separator);
+          const name1 = nameAndAddress[0];
+          const address1 = nameAndAddress[1].trim();
+          const city1 = nameAndAddress[2].trim();
+          const pincode1 = nameAndAddress[3].trim();
+          const mobile1 = nameAndAddress[4].trim();
+          const email1 = nameAndAddress[5].trim();
+
+          const name = document.getElementById("name");
+          const country = document.getElementById("country");
+          const address = document.getElementById("address");
+          const city = document.getElementById("city");
+          const pincode = document.getElementById("pincode");
+          const mobile = document.getElementById("mobile");
+          const email = document.getElementById("email");
+
+          name.value = name1;
+          address.value = address1;
+          city.value = city1;
+          pincode.value = pincode1;
+          mobile.value = mobile1;
+          email.value = email1;
+        }
+      }
+    </script>
+
+    <!-- SWEET ALET SCRIPT  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Modernizer & jQuery JS -->
     <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
@@ -1115,13 +1437,11 @@
     <script src="assets/js/plugins/select2.min.js"></script>
     <script src="assets/js/plugins/ion.rangeSlider.min.js"></script>
     <script src="assets/js/plugins/jquery.zoom.min.js"></script>
-    <!-- SWEET align-items-center -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    <% } %>
   </body>
 
-
-  <!-- Mirrored from htmldemo.net/furbar-1/furbar/my-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:16:18 GMT -->
+  <!-- Mirrored from htmldemo.net/furbar-1/furbar/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 14 Dec 2023 16:16:17 GMT -->
 </html>

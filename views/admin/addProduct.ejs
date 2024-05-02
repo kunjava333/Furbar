@@ -290,9 +290,10 @@
                         <div class="card-body">
                             <div class="input-upload">
                                 <img src="assets/imgs/theme/upload.svg" alt="" />
-                                <input class="form-control" type="file" name="image" required/>
+                                <input class="form-control" type="file" name="image" id="images"  required/>
                             </div>
                         </div>
+                        <button id="preveiw1" class="btn btn-primary" type="button" onclick="preveiw()">preveiw</button>
                         <div class="card-body">
                             <div class="input-upload">
                                 <img src="assets/imgs/theme/upload.svg" alt="" />
@@ -312,7 +313,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- card end// -->
                     <div class="card mb-4">
                         <div class="card-header">
@@ -324,8 +324,6 @@
                                     <label class="form-label">Category</label>
                                     <select class="form-select" name="category" required>
                                         <% if (typeof dbData !== "undefined") { %>
-                                            
-                                     
                                            <% dbData.forEach(element => {  %>
                                             <option><%= element.name %></option>
                                          <%  }); %>
@@ -358,10 +356,21 @@
 
                         button.addEventListener('click', function () {
                             form.submit()
-
                         })
-                        
-
+                        function preveiw () {
+                            const image1 = document.getElementById('images').value
+                            if (e.target.files && e.target.files[0]) {
+                             const fileName = e.target.files[0].name; 
+                              console.log("Selected filename:", fileName);
+                            }
+                            console.log('olkkee');
+                            console.log(image1);
+                            Swal.fire({
+                             imageUrl: `${fileName}`,
+                             imageHeight: 300,
+                             imageAlt: "A tall image"
+                            });
+                        }
                     </script>
                     &copy; Nest - HTML Ecommerce Template .
                 </div>
@@ -371,11 +380,16 @@
             </div>
         </footer>
     </main>
-    <script src="./corpperjs/cropper.common.js"></script>
-    <script src="/corpperjs/cropper.esm.js"></script>
-    <script src="/corpperjs/cropper.js"></script>
-    <script src="/corpperjs/cropper.min.js"></script>
-    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <!-- <script src="./corpperjs/cropper.common.js"></script> -->
+    <!-- <script src="/corpperjs/cropper.esm.js"></script> -->
+    <!-- <script src="/corpperjs/cropper.js"></script> -->
+    <!-- <script src="/corpperjs/cropper.min.js"></script>
+    
+    -->
+    <!-- THIS IS SWEET ALERT SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="assets/js/vendors/select2.min.js"></script>
     <script src="assets/js/vendors/perfect-scrollbar.js"></script>

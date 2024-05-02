@@ -34,7 +34,7 @@ async function categoryData() {
                 <div  class="card h-100">
 
                 <a href="#" class="img-wrap">
-              <img style="height: 200px;width: 250px;" src="/images/${
+              <img style="height: 200px;width: 305px;" src="/images/${
                 element.imageurl[0]     
               }" alt="Product" class="card-img-top">
                        </a>
@@ -43,12 +43,10 @@ async function categoryData() {
                          <p class="card-text">${element.price}$</p>
    </div>
                   <div class="card-footer">
-            <a href="/admin/edit/${
-              element._id
-            }" class="btn btn-sm font-sm rounded btn-brand"><i class="material-icons md-edit"></i>Edit</a>
-           <a href="/admin/remove/${
-             element._id
-           }" class="btn btn-sm font-sm btn-light rounded"><i class="material-icons md-delete_forever"></i>Delete</a>
+            <button onclick="softDelete(this, '${element._id}')"
+            }" class="btn btn-sm font-sm rounded btn-brand"><i class="material-icons md-edit"></i>Edit</button>
+           <button onclick="softDelete(this, '${element._id}')"
+           }" class="btn btn-sm font-sm btn-light rounded"><i class="material-icons md-delete_forever"></i>Delete</button>
            <br>
            ${
              element.blockProduct == true
@@ -56,8 +54,12 @@ async function categoryData() {
 
                : `<button onclick="softDelete(this, '${element._id}')" class="btn btn-sm font-sm btn-danger rounded"><i class="material-icons md-delete_forever"></i>Hide</button>`
            }
+    <p class="quantity" style="color: black;"> quantity = ${element.stock}</p>
+           
                     </div>
                           </div>
+
+                          
                           </div>
                                              `;
 
@@ -73,7 +75,8 @@ async function categoryData() {
 
 function softDelete(tag,id) {
   try {
-    let state = tag.textContent
+    let statee = tag.textContent
+    let state = statee.toLowerCase()
     console.log(state);
     console.log(id);
     Swal.fire({
@@ -83,7 +86,7 @@ function softDelete(tag,id) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"    
+        confirmButtonText: `Yes ${state} it!`    
       }).then((result) => {
         if (result.isConfirmed) {
             fetch(`/admin/${state}/${id}`) // Replace '/api/data' with your actual endpoint URL
@@ -96,8 +99,11 @@ function softDelete(tag,id) {
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
+
+            if(state == 'delete'){
              let Hide = document.getElementById(`soft${id}`);
              Hide.style.display = 'none'
+            }
           Swal.fire({
             title: `${state}ed`,
             text: `The product has been ${state}ed`,

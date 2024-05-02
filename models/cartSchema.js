@@ -6,14 +6,22 @@ const cartSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    orders:{
-        type:Array,
+    orders:[{
+        productId:{
+            type:mongoose.Schema.Types.ObjectId,
+            required:true,
+            ref:"Product"
+        },
+        quantity:{
+            type:Number,
+            required:true,
+            default:1
+        },
+       total:{
+        type:String,
         required:true
-    },
-    quantity:{
-        type:Number,
-        required:true
-    }
+        }
+    }]
 })
 
 module.exports = mongoose.model ('Cart',cartSchema)

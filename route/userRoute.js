@@ -8,8 +8,8 @@ userRoute.set('views','./views/user')
 userRoute.use(express.json());
 userRoute.use(express.urlencoded({extended:true}))
 userRoute.use(session({
-    secret: 'your-secret-here',
-    resave: true,
+    secret: 'process.env.SESSION-PASS',
+    resave: false,
     saveUninitialized: true
   }));;
 
@@ -18,48 +18,60 @@ const checkSession  = require('../midleware/session');
 const productController = require('../controller/productControler');
 
 //User Login
-userRoute.get('/',checkSession.isLogout,userController.user_login);
-userRoute.get('/login',checkSession.isLogout,userController.user_login);
-userRoute.post('/login',userController.auth_user);
+userRoute.get('/',checkSession.isLogout,userController.userLogin);
+userRoute.get('/login',checkSession.isLogout,userController.userLogin);
+userRoute.post('/login',userController.authUser);
 
 
 //User Register
-userRoute.get('/register',checkSession.isLogout,userController.user_register);
-userRoute.post('/register',userController.create_user)
+userRoute.get('/register',checkSession.isLogout,userController.userRegister);
+userRoute.post('/register',userController.createUser)
 
 //Load Home Page
 userRoute.get('/Home',checkSession.isLogin,userController.userHome)
 
 
 //Logout
-userRoute.get('/logout',userController.user_logout);
+userRoute.get('/logout',userController.userLogout);
 
 
 //Otp
-userRoute.post('/otp',userController.otp_verify);
-userRoute.get('/newOtp',userController.otp_resend);
+userRoute.post('/otp',userController.otpVerify);
+userRoute.get('/newOtp',userController.otpResend);
 // userRoute.get('/otpPage',userController.otp_page);
 
 
 //Products
-userRoute.get('/product_details/:id',productController.product_details);
-userRoute.get('/showProduct-user/:category',productController.show_products_user);
+userRoute.get('/product_details/:id',productController.productDetails);
+userRoute.get('/showProduct-user/:category',productController.showProductsUser);
 
 
 //ABOUT USER
-userRoute.get('/about-user',userController.aboutUser);
-userRoute.post('/update-user-info',userController.update_user_info);
+userRoute.get('/about-user',checkSession.isLogin,userController.aboutUser);
+userRoute.post('/update-user-info',userController.updateUserInfo);
+
 
 //ADD ADRESS
-userRoute.get('/add-address-page',userController.add_address_page);
-userRoute.post('/add-address',userController.add_address);
-userRoute.get('/delete-address/:id',userController.address_delete);
-userRoute.get('/edit-address/:id',userController.edit_address_page);
-userRoute.post('/update-address',userController.edit_address);
+userRoute.get('/add-address-page',checkSession.isLogin,userController.addAddressPage);
+userRoute.post('/add-address',userController.addAddress);
+userRoute.get('/delete-address/:id',checkSession.isLogin,userController.addressDelete);
+userRoute.get('/edit-address/:id',checkSession.isLogin,userController.editAddressPage);
+userRoute.post('/update-address',userController.editAddress);
 
 
 //ADD TO CART
-userRoute.get('/add-to-cart/:id',productController.add_to_cart);
+userRoute.get('/add-to-cart',checkSession.isLogin,productController.addToCart);
+userRoute.get('/increase-quantity',checkSession.isLogin,productController.increaseQuantity)
+userRoute.get('/check-cart',checkSession.isLogin,productController.checkCart);
+
+userRoute.get('/cart',checkSession.isLogin,productController.cartPage);
+
+
+// userRoute.get('/add-orders',checkSession.isLogin,productController.addOrders)
+userRoute.get('/checkout',checkSession.isLogin,productController.showCheckout)
+userRoute.post('/order',userController.placeOrder);
+userRoute.get('/remove-cart',productController.removeCart);
+
 
 
 module.exports = userRoute;

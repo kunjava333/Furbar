@@ -33,9 +33,7 @@ const sendMail = (email, otp) => {
 
 function sendOtp (email){
 const otp = otpGenerator.generate(4, { upperCaseAlphabets: false, specialChars: false ,digits:true,lowerCaseAlphabets:false});
-// setTimeout(()=>{
-//     delete otp
-// },60000)
+
 sendMail(email,otp)
 gloabal = otp;
 return otp

@@ -23,5 +23,8 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "ejs-lint": "^2.0.0"
+  }
 }
