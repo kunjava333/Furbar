@@ -132,7 +132,7 @@
               <div class="dropdown">
                 <a
                   class="action"
-                  href="#"
+                  href="/cart"
                   role="button"
                   data-bs-toggle="dropdown"
                 >
@@ -335,7 +335,7 @@
                     <li><a href="login.html">Sign In</a></li>
                   </ul>
                 </div>
-                <a class="action" href="cart.html">
+                <a class="action" href="/cart">
                   <i class="pe-7s-shopbag"></i>
                   <span class="number">3</span>
                 </a>
@@ -677,7 +677,7 @@
                     <table class="table">
                       <thead>
                         <tr>
-                          <th class="no">No</th>
+                          <!-- <th class="no">No</th> -->
                           <th class="name">Name</th>
                           <th class="date">Date</th>
                           <th class="status">Status</th>
@@ -686,17 +686,25 @@
                         </tr>
                       </thead>
                       <tbody>
+                        <% if(typeof allData !== "undefined"){ %>
+<% allData.orderData.forEach(element => { %>
+  <% element.items.forEach((item,index) => { %>
 
-                        <tr>
-                          <td>1</td>
-                          <td>Mostarizing Oil</td>
-                          <td>Aug 22, 2020</td>
-                          <td>Pending</td>
-                          <td>$100</td>
+   <tr>
+                          <!-- <td><%= index++ %></td> -->
+                          <td><%= item.productId.title %></td>
+                        <td><%= new Date(element.date ).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></td>
+                          <td><%= element.status %></td>
+                          <td>$<%= item.productId.price * item.quantity %></td>
                           <td>
                             <a href="#">View</a>
                           </td>
                         </tr>
+                        <%  }) %>
+
+<% }) %>
+<% } %>
+                     
                       </tbody>
                     </table>
                   </div>
@@ -707,7 +715,7 @@
                 <div class="my-account-download account-wrapper">
                   <h4 class="account-title">Download</h4>
                   <div class="account-table text-center table-responsive">
-                    <table class="table">
+                    <!-- <table class="table">
                       <thead>
                         <tr>
                           <th class="name">Product</th>
@@ -734,7 +742,7 @@
                           </td>
                         </tr>
                       </tbody>
-                    </table>
+                    </table> -->
                   </div>
                 </div>
               </div>
@@ -757,8 +765,7 @@
                         <h6 class="name"><%= element.name %></h6>
                         <p><%= element.address %>,<%= element.city%>,<br><%= element.state %>,<%= element.country %></p>
                         <p><%= element.mobile %></p>
-                        <a class="btn btn-primary btn-hover-dark" href="/add-address-page"
-                          ><i class="fa fa-edit"></i>Add Address</a>
+                        
                           <a class="btn btn-primary btn-hover-danger" href="/delete-address/<%= element._id %>"
                           ><i class="fa fa-edit"></i>Delete </a>
                           <br>
@@ -769,6 +776,8 @@
                     </div>
                     <% }); %>
                     </div>
+                    <a class="btn btn-primary btn-hover-dark" href="/add-address-page"
+                          ><i class="fa fa-edit"></i>Add Address</a>
                 </div> 
               </div> 
 
@@ -777,7 +786,7 @@
               <div class="tab-pane fade" id="pills-account">
                 <div class="my-account-details account-wrapper">
                   <h4 class="account-title">Account Details</h4>
-               <form action="/update-user-info" method="post" id="form">
+               <form id="form">
                   <div class="account-details">
                     <div class="row">
                         <% if (typeof message !== "undefined") { %>      
@@ -791,16 +800,17 @@
                           <input
                             type="text"
                             placeholder="User Name"
-                            value="<%=allData.userData[0].name%>" name="name"
+                            value="<%=allData.userData[0].name%>" id="name" name="name"
                           />
                         </div>
                       </div>
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <div class="single-form">
                           <input
                             type="text"
-                            placeholder="Email address"
-                            value="<%= allData.userData[0].email %>" name="email"
+                            value="<%=allData.userData[0].mobile %>"
+                            name="newPassword"
+                            id="mobile"
                           />
                         </div>
                       </div>
@@ -815,6 +825,7 @@
                             type="password"
                             placeholder="Current Password"
                             name="oldPassword"
+                            id="oldPassword"
                           />
                         </div>
                         <input type="hidden" name="userId" value="<%= allData.userData._id %>">
@@ -834,7 +845,6 @@
                         <div class="single-form">
                           <input
                             type="password"
-                            onkeyup="check()"
                             placeholder="Confirm Password"
                             name="confirmPassword"
                             id="confirmPassword"
@@ -848,7 +858,8 @@
                       <div class="col-md-6">
                         <div class="single-form">
                           <button 
-                            id="formButton"
+                          type="button"
+                            id="button"
                             class="btn btn-primary btn-hover-dark"
                           >
                             Save Change
@@ -1096,9 +1107,106 @@
     });
 }
 
-  
+function validate () {
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+
+    const passwordRegex = /\S/;
+; 
+    const newPasswordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{8,}/
+    
+    const isValidPassword = passwordRegex.test(oldPassword)
+    const isValidNewPassword = newPasswordRegex.test(newPassword)
+
+    if(!isValidPassword){
+      Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Fill the column!",
+          });
+      return false
+    }
+    if(newPassword == confirmPassword){
+      if(!isValidNewPassword){
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "PASSWORD SHOULD BE 8 CHARECTERS HAVE CAPITAL LETTER AND A NUMBER!!",
+          });
+      return false 
+        }else{
+          return true
+        }
+    }else{
+      Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "New Password and Confirm Passwoerd dont match!",
+          });
+      return false
+      }
+}
+
+const button = document.getElementById('button')
+const form = document.getElementById('form')
+const formData = new FormData(form);  
+
+button.addEventListener('click',() => {
+  const status = validate()
+  const oldPassword = document.getElementById('oldPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const name = document.getElementById('name').value;
+  const mobile = document.getElementById('mobile').value;
+  if(status){
+  const data =   fetch("/update-user-info", {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify({
+      name:name,
+      mobile:mobile,
+      oldPassword:oldPassword,
+      newPassword:newPassword
+    })
+  }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    }).then((data) => {
+      console.log(`this is data ${data.message}`);
+      console.log('this is working ');
+      if(data.message){
+        Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `${data.message}`,
+      });
+      }else if(data.success){
+        Swal.fire({  
+        icon: "success",
+        title: "Oops...",
+        text: `${data.success}`,
+      });
+      setTimeout(()=>{
+window.location.href = '/Home'
+          },3000)
+      }
+    
+         
+    })
+  }
+})
 </script>
    
+
+
+    <!-- SWEET ALERT LINK -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- Modernizer & jQuery JS -->
     <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>

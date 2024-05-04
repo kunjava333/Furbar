@@ -4,12 +4,16 @@ const Otp = require("../controller/otpController");
 const Address = require("../models/addressSchema");
 const Order = require('../models/orderSchema')
 const Cart = require('../models/cartSchema')
-const Prodcut = require('../models/productsSchema.js')
+const Prodcut = require('../models/productsSchema.js');
+
 const hashPassword = async (password) => {
   try {
+    console.log(password);
+    console.log('this is geting here ');
     const hashedPassword = await bcrypt.hash(password, 10);
     return hashedPassword;
   } catch (error) {
+    console.log('this is geting here');
     console.log(error.message);
   }
 };
@@ -40,7 +44,7 @@ const Ecompare = async (email1) => {
 
 const userRegister = async (req, res) => {
   try {
-    res.render("userRegisger");
+    res.render("userRegister");
   } catch (error) {
     console.log(error.message);
   }
@@ -57,20 +61,22 @@ const createUser = async (req, res) => {
         mobile: req.body.number,
         password: await hashPassword(req.body.password),
         Date: Date.now(),
+        mobile:req.body.mobile,
         isAdmin: false,
         isBlocked: false,
       });
       req.session.userData = user;
       // console.log(req.session.userData);
       const otp = Otp.sendOtp(req.body.email);
-    
+
       console.log(otp);
       if (otp) {
         console.log("they are here");
         req.session.otp = otp;
-        setTimeout(()=>{
-           req.session.otp = null
-        ,60000});
+        setTimeout(() => {
+          req.session.otp = null
+            , 60000
+        });
         res.render("otpVerifyer");
       } else {
         console.log("Problem in storing otp in session ");
@@ -108,23 +114,23 @@ const otpVerify = async (req, res) => {
   }
 };
 
-const addAddress = async (req,res)=>{
+const addAddress = async (req, res) => {
   try {
-    const {user_id} = req.session
-    const {name,address,country,city,state,pincode,mobile} = req.body;
-    const newAddress = new Address ({
-        user_id:user_id,
-        name:name,
-        address:address,
-        country:country,
-        city:city,
-        state:state,
-        pincode:pincode,
-        mobile:mobile
+    const { user_id } = req.session
+    const { name, address, country, city, state, pincode, mobile } = req.body;
+    const newAddress = new Address({
+      user_id: user_id,
+      name: name,
+      address: address,
+      country: country,
+      city: city,
+      state: state,
+      pincode: pincode,
+      mobile: mobile
     })
-    if(newAddress){
+    if (newAddress) {
       newAddress.save()
-      res.render('addAddress',{message:'A new address has been saved'})
+      res.render('addAddress', { message: 'A new address has been saved' })
     }
   } catch (error) {
     console.log(error.message);
@@ -149,26 +155,27 @@ const userLogin = async (req, res) => {
   }
 };
 
-const aboutUser = async (req,res)=>{
+const aboutUser = async (req, res) => {
   try {
-    const {user_id} = req.session
-    const user = await User.find({_id:user_id})
-    const address = await Address.find({user_id:user_id})
-    const order = Order.find({user_id:user_id})
+    const { user_id } = req.session
+    const user = await User.find({ _id: user_id })
+    const address = await Address.find({ user_id: user_id })
+    const order = await Order.find({ user_id: user_id }).populate('items.productId')
+    console.log(order);
     // console.log(userData);
     // console.log(addressData);
-    const data={
-      userData:user,
-      addressData:address,
-      orderData:order
+    const data = {
+      userData: user,
+      addressData: address,
+      orderData: order
     }
-    res.render('userAccount',{allData:data})
+    res.render('userAccount', { allData: data })
   } catch (error) {
     console.log(error.message);
   }
 }
 
-const addAddressPage = async (req,res)=>{
+const addAddressPage = async (req, res) => {
   try {
     res.render('addAddress')
   } catch (error) {
@@ -176,11 +183,11 @@ const addAddressPage = async (req,res)=>{
   }
 }
 
-const addressDelete = async (req,res)=>{
+const addressDelete = async (req, res) => {
   try {
     const id = req.params.id
-    const remove = await Address.findByIdAndDelete({_id:id})
-    if(remove){
+    const remove = await Address.findByIdAndDelete({ _id: id })
+    if (remove) {
       console.log('things are geting here');
       res.redirect('/about-user')
     }
@@ -189,11 +196,11 @@ const addressDelete = async (req,res)=>{
   }
 }
 
-const editAddressPage = async (req,res)=>{
+const editAddressPage = async (req, res) => {
   try {
     const id = req.params.id
-    const userData = await Address.find({_id:id})
-    res.render('editAddress',{userData:userData})
+    const userData = await Address.find({ _id: id })
+    res.render('editAddress', { userData: userData })
   } catch (error) {
     console.log(error.message);
   }
@@ -201,11 +208,11 @@ const editAddressPage = async (req,res)=>{
 
 
 
-const editAddress = async (req,res)=>{
+const editAddress = async (req, res) => {
   try {
-    const {name,address,country,city,state,pincode,mobile,user_id} = req.body;
-    const change = await Address.findByIdAndUpdate({_id:user_id},{$set:{name:name,address:address,country:country,city:city,state:state,pincode:pincode,mobile:mobile}})
-    if(change){
+    const { name, address, country, city, state, pincode, mobile, user_id } = req.body;
+    const change = await Address.findByIdAndUpdate({ _id: user_id }, { $set: { name: name, address: address, country: country, city: city, state: state, pincode: pincode, mobile: mobile } })
+    if (change) {
       console.log('thins are working here and everywhere');
       res.redirect('/about-user')
     }
@@ -214,30 +221,43 @@ const editAddress = async (req,res)=>{
   }
 }
 
-const updateUserInfo = async (req,res)=>{
+
+const updateUserInfo = async (req, res) => {
   try {
-    const {user_id} = req.session
-   const {name,email,oldPassword,newPassword,confirmPassword} = req.body
-   const dbData = await User.findById({_id:user_id})
-   const password = await hashPassword(newPassword)
-   const comparePassword = await bcrypt.compare(
-    oldPassword,
-    dbData.password
-  );
-   if(comparePassword){
-    const update = await User.findByIdAndUpdate({_id:user_id},{$set:{name:name,email:email,password:password}})
-    if(update){
-      res.render('userAccount',{message:'your info has been updated'})
-    }else{
-      res.render('userAccount',{message:'some porblem updating please try again'})
+    const { user_id } = req.session
+    const { name, mobile , oldPassword } = req.body
+    console.log(req.body);
+    const dbData = await User.findOne({_id:user_id})
+    console.log(dbData);
+    const comparePassword = await bcrypt.compare(oldPassword,dbData.password);
+    if (dbData) {
+console.log('yes dbdata');
+console.log(comparePassword);
+      if (comparePassword) {
+        const password = await hashPassword(req.body.newPassword)
+console.log('yes compare password');
+        const update = await User.findByIdAndUpdate({ _id: user_id }, { $set: { name: name,mobile:mobile, password: password } })
+        if (update) {
+
+          res.status(200).json({success:true, success: 'Your info has been updated' });
+
+        } else {
+         res.status(200).json({success:true,message:'Error updating your info'})
+        }
+      }else if (!comparePassword) {
+        res.status(200).json({success:true,message:'Your Oldpassword is Incorrect'})
+      }
+
+    } else if (!comparePassword) {
+      res.status(200).json({success:true,message:'Your Oldpassword is Incorrect'})
     }
-   }else{
-    res.render('userAccount',{message:'your old passowrd is wrong'})
-   }
+
   } catch (error) {
     console.log(error.message);
   }
 }
+
+
 
 const otpResend = async (req, res) => {
   try {
@@ -262,25 +282,25 @@ const authUser = async (req, res) => {
     const logEmail = req.body.email;
     const logPassowrd = req.body.password;
     const dbData = await User.findOne({ email: logEmail });
-      if (!dbData) {
-        res.render("userLogin", { message: "wrong email please try again" });
-      }else if(dbData.isBlocked == true){
-       res.render('userLogin',{message:"you are restricted"})
-      } else {
-        const comparePassword = await bcrypt.compare(
-          logPassowrd,
-          dbData.password
-        );
+    if (!dbData) {
+      res.render("userLogin", { message: "wrong email please try again" });
+    } else if (dbData.isBlocked == true) {
+      res.render('userLogin', { message: "you are restricted" })
+    } else {
+      const comparePassword = await bcrypt.compare(
+        logPassowrd,
+        dbData.password
+      );
 
-        if (dbData.email == logEmail && comparePassword) {
-          req.session.user_id = dbData._id;
+      if (dbData.email == logEmail && comparePassword) {
+        req.session.user_id = dbData._id;
 
-          res.redirect("/Home");
-        } else if (!comparePassword) {
-          res.render("userLogin", { message: "the password is incorrect" });
-        }
+        res.redirect("/Home");
+      } else if (!comparePassword) {
+        res.render("userLogin", { message: "the password is incorrect" });
       }
-    
+    }
+
   } catch (error) {
     console.log(error.message);
   }
@@ -296,59 +316,83 @@ const userLogout = async (req, res) => {
 };
 
 
-const show_orders = async (req,res)=>{
+const show_orders = async (req, res) => {
   try {
-    
+
   } catch (error) {
     console.log(error.message);
   }
 }
 
-const placeOrder = async (req,res)=>{
+const placeOrder = async (req, res) => {
   try {
-    const {name,country,address,city,district,pincode,mobile,email} = req.body
-    const {user_id} = req.session
-    const cart = await Cart.findOne({user_id:user_id})
+    const { name, country, address, city, district, pincode, mobile, email } = req.body
+    const { user_id } = req.session
+    const cart = await Cart.findOne({ user_id: user_id })
     const array = cart.orders
     console.log(array[0]);
     const order = new Order({
-      user_id:user_id,
-      items:[{
-        productId:array[0].productId,
-        quantity:array[0].quantity,
-        total:array[0].total
+      user_id: user_id,
+      items: [{
+        productId: array[0].productId,
+        quantity: array[0].quantity,
+        total: array[0].total
       }],
       date: new Date(),
-      status:'pinding',
-      email:email,
-      address:{
-        name:name,
-        address:address,
-        country:country,
-        city:city,
-        district:district,
-        pincode:pincode,
-        mobile:mobile
+      status: 'pinding',
+      email: email,
+      address: {
+        name: name,
+        address: address,
+        country: country,
+        city: city,
+        district: district,
+        pincode: pincode,
+        mobile: mobile
       },
-      paymentMethod:'cash on delivery'
+      paymentMethod: 'cash on delivery'
     })
-     
+
     const ordered = order.save()
-    if(ordered){
-      if(array.length>1){
-        for(let i=1;i<array.length;i++){
-          const update = await Order.findOneAndUpdate({user_id:user_id },{ $push: { items: { productId: array[i].productId, quantity: array[i].quantity ,total:array[i].total} } })
-  
+    if (ordered) {
+      if (array.length > 1) {
+        for (let i = 1; i < array.length; i++) {
+          const update = await Order.findOneAndUpdate({ user_id: user_id }, { $push: { items: { productId: array[i].productId, quantity: array[i].quantity, total: array[i].total } } })
+
         }
+        for(let j=0;j<array.length;j++){
+          const productUpdate = await Prodcut.findOneAndUpdate({_id:array[j].productId},{$inc:{stock: -array[j].quantity}})
+
+        }
+        
       }
-      await Cart.findOneAndDelete({_id:cart._id})
-      setTimeout(()=>{
+      await Cart.findOneAndDelete({ _id: cart._id })
+      setTimeout(() => {
         res.redirect('/')
 
-      },2100)
-      
+      }, 2100)
+
     }
 
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const updateCart = async(req,res) => {
+  try {
+    const {user_id} = req.session
+    const {id,count} = req.query 
+
+
+   const cart = await Cart.findOneAndUpdate({user_id:user_id})
+   const index = cart.orders.findIndex(item => item.productId.equals(id))
+
+   console.log(count);
+   if(count >= 1){
+     cart.orders[index].quantity = count;
+     await cart.save()
+   }
   } catch (error) {
     console.log(error.message);
   }
@@ -370,5 +414,6 @@ module.exports = {
   addressDelete,
   editAddressPage,
   editAddress,
-  placeOrder
+  placeOrder,
+  updateCart
 };

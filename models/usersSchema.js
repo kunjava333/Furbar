@@ -18,6 +18,10 @@ const usersSchema = new mongoose.Schema({
         required:true
         
     },
+    mobile:{
+        type:Number,
+        required:true
+    },
     isAdmin:{
         type:Boolean,
         required:true

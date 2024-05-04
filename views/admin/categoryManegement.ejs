@@ -222,9 +222,9 @@
                                              
                                                 <td class="text-end">
                                                     <div class="dropdown">
-                                                      
-                                                        
-                                                        <a class="btn btn-sm font-sm rounded btn-primary" href="">Edit info</a>
+                                                        <a href="/admin/edit-category?id=<%= element._id %>" class="btn btn-sm font-sm rounded btn-primary"  >Edit info</a>
+
+
                                                         
                                                 <% if (element.isBlocked ==  true) {  %>
                                                     <a href="/admin/list/<%= element._id %>"  class="btn btn-sm font-sm  rounded btn-success" onclick="">  List </a>
@@ -233,6 +233,7 @@
                                                 
                                                       <% } %>
                                                 
+                                                        <a href="/admin/delete-category?id=<%= element._id %>" class="btn btn-sm font-sm btn-danger"  >Delete category</a>
                                                          
                                                     
                                  

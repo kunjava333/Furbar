@@ -21,6 +21,17 @@ const showProductsUser = async (req, res) => {
     }
 }
 
+const sortProduct = async (req,res) => {
+    try {
+        const {sort} = req.query;
+
+        const data = await Product.find({})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 const checkCart = async (req, res) => {
     try {
@@ -235,6 +246,7 @@ const showProducts = async (req, res) => {
 
 const editProduct = async (req, res) => {
     try {
+        console.log('things are here');
         const product_id = req.params.id
         // console.log(user_id);
         const dbData = await Product.findOne({ _id: product_id })
@@ -327,7 +339,8 @@ const cartPage = async (req, res) => {
 
 const showCheckout = async (req,res)=>{
     try {
-        const {user_id} = req.session
+        const {user_id} = req.session;
+        // const {count} = req.query;
         const userData  = await User.findOne({_id:user_id})
         const addressData = await Adress.find({user_id:user_id})
         const cartData = await Cart.findOne({ user_id:user_id }).populate('orders.productId')
@@ -335,7 +348,7 @@ const showCheckout = async (req,res)=>{
         const fulData = {
             cart:cartData,
             address:addressData,
-            user:userData
+            user:userData,
         }
         console.log(fulData.cart.orders);
         res.render('checkout',{data:fulData})

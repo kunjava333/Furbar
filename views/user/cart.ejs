@@ -263,7 +263,7 @@
                                     <li><a href="login.html">Sign In</a></li>
                                 </ul>
                             </div>
-                            <a class="action" href="cart.html">
+                            <a class="action" href="/cart">
                                 <i class="pe-7s-shopbag"></i>
                                 <span class="number">3</span>
                             </a>
@@ -520,18 +520,19 @@
                                 </td>
                                 <td class="quantity">
                                     <div class="product-quantity d-inline-flex">
-                                        <button type="button" class="sub" onclick="showMessage()">
+                                        <button type="button" class="sub" onclick="showMessage('<%= element.productId._id %>')">
                                             -
                                         </button>
                                         <input type="text" value="<%= element.quantity %>" id="count"/>
-                                        <button type="button" class="add" onclick="showMessage()">
+                                    
+                                        <button type="button" class="add" onclick="showMessage('<%= element.productId._id %>')">
                                             +
                                         </button>
                                         <p style="color: red;" id="message"></p>
                                     </div>
                                 </td>
                                 <td class="product-total-price">
-                                    <span class="price">$<%= element.total %></span>
+                                    <span id="total" class="price">$<%= element.productId.price * element.quantity %></span>
                                 </td>
                                 <td class="product-action">
                                     <a  href="/remove-cart?id=<%= element.productId._id %>" class="remove">
@@ -586,9 +587,10 @@
                                 <% } %>
                             </table>
                         </div>
-                        <div class="cart-total-btn">
-                            <a href="/checkout" class="btn btn-dark btn-hover-primary btn-block">Proceed To Checkout</a>
+                        <div class="cart-total-btn" id="checkoutButton">
+                            <a href="/checkout" class="btn btn-dark btn-hover-primary btn-block" id="checkoutLink">Proceed To Checkout</a>
                         </div>
+                        
                     </div>
                     <!-- Cart Totals End -->
                 </div>
@@ -775,21 +777,32 @@
     <script>
        
 
-        function showMessage() {
-        const count = document.getElementById('count').value
-        const message = document.getElementById('message')
-        const button = document.getElementById('button')
+       function showMessage(id) {
+    const message = document.getElementById('message');
+    const anchorTag = document.getElementById('checkoutLink'); // Assuming 'anchorTag' is the ID of your anchor tag
+    const count = parseInt(document.getElementById('count').value);
+    const money = document.getElementById('total');
+    const total = money.textContent;
 
-  if (count > 4 ) {
+    const priceStartIndex = 1;
+    const price = parseFloat(total.slice(priceStartIndex).trim());
 
-   message.innerHTML = 'Limit exceeds'
-   button.disable = true
-  } else {
+    if (count > 4) {
+        message.innerHTML = 'Limit exceeds';
+        anchorTag.removeAttribute('href'); // Remove the 'href' attribute to disable the anchor tag
+        anchorTag.style.pointerEvents = 'none'; // Disable pointer events to prevent clicks
+        anchorTag.style.color = 'gray'; // Optionally change color to indicate disabled state
+        total.textContent = count * price;
+    } else {
+        message.innerHTML = '';
+        anchorTag.setAttribute('href', `/checkout?count=${count}`); // Restore the 'href' attribute to enable the anchor tag
+        anchorTag.style.pointerEvents = 'auto'; // Enable pointer events
+        anchorTag.style.color = ''; // Reset color to default
+        fetch(`/update-cart?id=${id}&count=${count+1}`)
 
-    message.innerHTML = ''
-
-  }
+    }
 }
+
 
     </script>
 

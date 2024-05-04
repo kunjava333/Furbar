@@ -633,7 +633,7 @@
                             <p id="emailError"></p>
 
                             <div class="single-form">
-                                <input type="number" placeholder="mobile" name="number" required />
+                                <input type="number" placeholder="mobile" name="mobile" id="mobile" required />
                             </div>
                             <div class="single-form">
                                 <input type="text" placeholder="Address" name="Address" id="Address" required />
@@ -883,6 +883,7 @@
         const usernameError = document.getElementById('usernameError');
         const emailError = document.getElementById('emailError');
         const passwordError = document.getElementById('passwordError');
+        const mobile = document.getElementById('mobile')
         form.addEventListener('submit', (event) => {
             event.preventDefault(); // Prevent default form submission
 

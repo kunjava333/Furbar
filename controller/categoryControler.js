@@ -94,10 +94,47 @@ const listCategory = async (req, res) => {
   }
 };
 
+const editCategoty = async (req,res) => {
+  try {
+    const {id} = req.query;
+    const data = await Category.findOne({_id:id})
+    console.log(id);
+    console.log(data);
+    res.render('editCategory',{categoryData:data})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const updateCategory = async (req,res) => {
+  try {
+    const {name,description} = req.body
+    const {id} = req.query
+    const update = await Category.findOneAndUpdate({_id:id},{name:name,description:description});
+    res.redirect('/admin/categoryManegement')
+
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const deleteCategory = async (req,res) => {
+  try {
+    const {id} = req.query
+    const update = await Category.findOneAndDelete({_id:id})
+    res.redirect('/admin/categoryManegement')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
   categoryPage,
   addCategoryPage,
   addCategory,
   unlistCategory,
   listCategory,
+  editCategoty,
+  updateCategory,
+  deleteCategory
 };

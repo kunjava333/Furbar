@@ -293,7 +293,10 @@
                                 <input class="form-control" type="file" name="image" id="images"  required/>
                             </div>
                         </div>
-                        <button id="preveiw1" class="btn btn-primary" type="button" onclick="preveiw()">preveiw</button>
+                        <button id="preveiw1" class="btn btn-primary" type="button">preveiw</button>
+                        <div class="">
+                            <img src="" id="prevImg" alt="">
+                        </div>
                         <div class="card-body">
                             <div class="input-upload">
                                 <img src="assets/imgs/theme/upload.svg" alt="" />
@@ -357,20 +360,24 @@
                         button.addEventListener('click', function () {
                             form.submit()
                         })
-                        function preveiw () {
-                            const image1 = document.getElementById('images').value
-                            if (e.target.files && e.target.files[0]) {
-                             const fileName = e.target.files[0].name; 
-                              console.log("Selected filename:", fileName);
+                        function preveiw (e) {
+                            const file = document.getElementById('images').files[0]
+                            let img = null
+                            
+                            if (file) {
+                                img = URL.createObjectURL(file)
+                              console.log("Selected filename:",img);
                             }
                             console.log('olkkee');
-                            console.log(image1);
                             Swal.fire({
-                             imageUrl: `${fileName}`,
+                             imageUrl: `${img}`,
                              imageHeight: 300,
                              imageAlt: "A tall image"
                             });
                         }
+                        const prevButton = document.getElementById('preveiw1')
+                        console.log(prevButton);
+                        prevButton.addEventListener('mouseover',preveiw)
                     </script>
                     &copy; Nest - HTML Ecommerce Template .
                 </div>

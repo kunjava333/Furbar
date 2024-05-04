@@ -117,18 +117,29 @@ const unblockUser = async (req,res)=>{
     }
 }
 
+
 const orderDetails = async (req,res)=>{
     try {
         const {id} = req.query
-        console.log(id);
+
         const detail = await Order.findById({_id:id}).populate('items.productId')
-        console.log(detail.items[0].productId);
+
+        console.log(detail);
         res.render('orderDetails',{detailData:detail})
     } catch (error) {
         console.log(error.message);
     }
 }
 
+const changeStatus = async (req,res) => {
+    try {
+        const {status,id} = req.query
+        console.log(id,status);
+        const update = await Order.findOneAndUpdate({_id:id},{status:status});
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 module.exports = {
@@ -141,6 +152,7 @@ module.exports = {
     blockUser,
     unblockUser,
     logout,
-    orderDetails
+    orderDetails,
+    changeStatus
 }
 

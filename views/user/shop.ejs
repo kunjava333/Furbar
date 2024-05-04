@@ -105,7 +105,7 @@
                         <a class="action" href="wishlist.html"><i class="pe-7s-like"></i></a>
 
                         <div class="dropdown">
-                            <a class="action" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="action" href="/cart" role="button" data-bs-toggle="dropdown">
                                 <i class="pe-7s-shopbag"></i>
                                 <span class="number">3</span>
                             </a>
@@ -263,7 +263,7 @@
                                     <li><a href="login.html">Sign In</a></li>
                                 </ul>
                             </div>
-                            <a class="action" href="cart.html">
+                            <a class="action" href="/cart">
                                 <i class="pe-7s-shopbag"></i>
                                 <span class="number">3</span>
                             </a>
@@ -510,10 +510,11 @@
                     </div>
                     <div class="shop-sort">
                         <span class="title">Sort By :</span>
-                        <select class="select2-2">
-                            <option value="featured">Featured</option>
-                            <option value="rating">Rating</option>
-                            <option value="price">Price</option>
+                        <select class="select2-2" id="sortSelect">
+                            <option value="featured">A to Z</option>
+                            <option value="featured">Z to A</option>
+                            <option value="price">Pricen Low to High</option>
+                            <option value="price">Pricen High to Low</option>
                         </select>
                     </div>
                 </div>
@@ -523,6 +524,7 @@
                         <!-- Shop Product Wrapper Start -->
                         <div class="shop-product-wrapper">
                             <div class="row">
+                                <% if(typeof dbData !== "undefined"){ %>
                                 <% dbData.forEach(element=> { %>
 
 
@@ -559,6 +561,8 @@
                                     <!--  -->
                                     <!-- Single Product End -->
                                     <% }); %>
+                                    <% } %>
+                                    <div class="container" id="container"></div>
                             </div>
                         </div>
                     </div>
@@ -1286,6 +1290,90 @@
         </div>
     </div>
     <!-- Quick View End -->
+
+
+
+
+
+    <script>
+        async function getProducts() {
+  try {
+    const sortSelect = document.getElementById("sortSelect");
+  const selectedValue = sortSelect.value;
+
+  // Build query parameters based on selectedValue (for flexibility with URL query params)
+  let queryParams = "";
+  switch (selectedValue) {
+    case "A to Z":
+      queryParams = "?sort=title:1"; // Filter by featured products
+      break;
+      case "Z to A":
+      queryParams = "?sort=title:-1"; // Filter by featured products
+      break;
+    case "price-Low-to-High":
+      queryParams = "?sort=price:-1"; // Sort by price ascending
+      break;
+    case "price-High-to-Low":
+      queryParams = "?sort=price:1"; // Sort by price descending
+      break;
+    // Add more cases for other sorting options
+    default:
+      queryParams = ""; // No sorting applied
+  }
+
+  const url = "/" + queryParams; // Append query params to base URL
+
+    const response = await fetch(url); // Replace with your actual endpoint
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const products = await response.json();
+
+    const container = document.getElementById("container");
+    container.innerHTML = ""; // Clear existing content
+
+    products.forEach((element) => {
+      const cardDiv = document.createElement("div");
+      cardDiv.classList.add("col-lg-3", "col-sm-6"); // Add classes for responsive layout
+
+      const productTemplate = `
+        <div class="single-product">
+          <a href="/product_details/${element._id}">
+            <img style="width: 200px; height: 200px;" src="/images/${element.imageurl[0]}" alt="product" />
+          </a>
+          <div class="product-content">
+            <h4 class="title">
+              <a href="/product_details/${element._id}">${element.title}</a>
+            </h4>
+            <div class="price">
+              <span class="sale-price">$${element.price}</span>
+            </div>
+          </div>
+          <ul class="product-meta">
+            <li>
+              <a class="action" href="#"><i class="pe-7s-like"></i></a>
+            </li>
+          </ul>
+        </div>
+      `;
+
+      cardDiv.innerHTML = productTemplate;
+      container.appendChild(cardDiv);
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    // Handle errors gracefully, e.g., display an error message to the user
+  }
+}
+
+getProducts(); // Call the function to fetch and display products
+
+    </script>
+
+
+
+
+
 
     <!-- JS
     ============================================ -->

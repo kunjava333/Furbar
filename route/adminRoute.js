@@ -60,11 +60,15 @@ adminRoute.get('/delete/:id',productControler.productDelete);
 adminRoute.get('/categoryManegement',categoryControler.categoryPage);
 adminRoute.get('/addCategory',categoryControler.addCategoryPage);
 adminRoute.post('/adddCategory',categoryControler.addCategory);
+adminRoute.post('/update-category',categoryControler.updateCategory)
+adminRoute.get('/edit-category',categoryControler.editCategoty)
 adminRoute.get('/unlist/:id',categoryControler.unlistCategory);
 adminRoute.get('/list/:id',categoryControler.listCategory);
+adminRoute.get('/delete-category',categoryControler.deleteCategory)
 
 
 adminRoute.get('/order-details',adminController.orderDetails);
+adminRoute.get('/status-change',adminController.changeStatus);
 
 adminRoute.get('*',(req,res)=>{   
     res.redirect('/admin')

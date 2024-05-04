@@ -205,20 +205,20 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-9">
-                            <form action="/admin/adddCategory" method="post" id="form">
+                            <form action="/admin/update-category?id=<%= categoryData._id %>" method="post" id="form">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label">Name</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="categoryName"
+                                    <input type="text" value="<%= categoryData.name %>" class="form-control" id="categoryName"
                                         name="name" onkeyup="validateCategoryName()" required/>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Description</label>
-                                    <textarea placeholder="Type here" id="cartDescription" class="form-control"
-                                        name="description" onkeyup="validateCategoryName()" required></textarea>
+                                    <textarea  id="cartDescription" class="form-control"
+                                        name="description" onkeyup="validateCategoryName()" required><%= categoryData.description %></textarea>
                                 </div>
 
                                 <div class="d-grid col-md-2">
-                                    <button id="button" class="btn btn-primary">Create category</button>
+                                    <button id="button" class="btn btn-primary">Update category</button>
                                 </div>
                             </form>
 
@@ -241,8 +241,8 @@
                             var button = document.getElementById('button')
                             var categoryName = document.getElementById("categoryName").value;
                             var categoryDescription = document.getElementById('cartDescription').value
-                            var regex = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/; // Regular expression to match only letters and whitespace
-                            if (!regex.test(categoryName) || !regex.test(categoryDescription)) {
+                            var regex = /^[a-zA-Z\s]+$/; // Regular expression to match only letters and whitespace
+                            if (!regex.test(categoryName) && !regex.test(categoryDescription)) {
                                 Swal.fire({
                                     icon: "error",
                                     title: "Oops...",

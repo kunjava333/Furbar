@@ -330,7 +330,7 @@
                     <li><a href="login.html">Sign In</a></li>
                   </ul>
                 </div>
-                <a class="action" href="cart.html">
+                <a class="action" href="/cart">
                   <i class="pe-7s-shopbag"></i>
                   <span class="number">3</span>
                 </a>
@@ -700,7 +700,6 @@
 
                       <% data.address.forEach(element => { %>
                       <option
-                        id="edkke"
                         value="<%= element.name %>,<%= element.address  %>,<%= element.city  %>,<%= element.pincode  %>,<%= element.mobile  %>,<%= data.user.email %>"
                       >
                         <%= element.address %>
@@ -958,7 +957,7 @@
                           <p>Total</p>
                         </td>
                         <td class="total-price">
-                          <p>$600.00</p>
+                          <p>$<%=  %></p>
                         </td>
                       </tr>
                     </tfoot>
@@ -1380,20 +1379,21 @@
       });
 
       async function updateAddressFields() {
-        const selectElement = document.getElementById("address_select");
-        const value = document.getElementById("edkke").value;
+        const selectElement = document.getElementById("address_select").value;
+        console.log(selectElement);
+        // const value = document.getElementById("edkke").value;
         const selectedIndex = selectElement.selectedIndex;
-        // const selectedValue = document.getElementById('mySelect').value; // Assuming you get the value this way
+        // const selectedselectElement = document.getElementById('mySelect').selectElement; // Assuming you get the selectElement this way
 
-        if (value) {
+        if (selectElement) {
           let separator = ","; // Default separator (assuming comma)
-          const hasSpaceAfterComma = value.indexOf(", ") !== -1; // Check for space after comma
+          const hasSpaceAfterComma = selectElement.indexOf(", ") !== -1; // Check for space after comma
 
           if (hasSpaceAfterComma) {
             separator = ", "; // Update separator if space is present
           }
 
-          const nameAndAddress = value.split(separator);
+          const nameAndAddress = selectElement.split(separator);
           const name1 = nameAndAddress[0];
           const address1 = nameAndAddress[1].trim();
           const city1 = nameAndAddress[2].trim();

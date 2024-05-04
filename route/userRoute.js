@@ -42,8 +42,8 @@ userRoute.get('/newOtp',userController.otpResend);
 
 
 //Products
-userRoute.get('/product_details/:id',productController.productDetails);
-userRoute.get('/showProduct-user/:category',productController.showProductsUser);
+userRoute.get('/product_details/:id',checkSession.isLogin,productController.productDetails);
+userRoute.get('/showProduct-user/:category',checkSession.isLogin,productController.showProductsUser);
 
 
 //ABOUT USER
@@ -65,12 +65,12 @@ userRoute.get('/increase-quantity',checkSession.isLogin,productController.increa
 userRoute.get('/check-cart',checkSession.isLogin,productController.checkCart);
 
 userRoute.get('/cart',checkSession.isLogin,productController.cartPage);
-
+userRoute.get('/update-cart',checkSession.isLogin,userController.updateCart);
 
 // userRoute.get('/add-orders',checkSession.isLogin,productController.addOrders)
 userRoute.get('/checkout',checkSession.isLogin,productController.showCheckout)
 userRoute.post('/order',userController.placeOrder);
-userRoute.get('/remove-cart',productController.removeCart);
+userRoute.get('/remove-cart',checkSession.isLogin,productController.removeCart);
 
 
 
