@@ -235,8 +235,6 @@
                                     <th>#ID</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Total</th>
-                                    <th scope="col">Status</th>
                                     <th scope="col">Date</th>
                                     <th scope="col" class="text-end">Action</th>
                                 </tr>
@@ -255,8 +253,8 @@
                                             <td>
                                                 <%= data.email %>
                                             </td>
-                                            <td>$9.00</td>
-                                            <td><span class="badge rounded-pill alert-warning">Pending</span></td>
+
+
                                             <% const date=new Date(data.Date); %>
                                                 <% const formattedDate=date.toISOString().split('T')[0]; %>
                                                     <td>

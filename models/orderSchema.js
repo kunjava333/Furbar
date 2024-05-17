@@ -8,18 +8,13 @@ const orderSchema = new mongoose.Schema({
     },
     items:[{
             productId:{
-                type:mongoose.Schema.Types.ObjectId,
+                type:Array,
                 required:true,
-                ref:"Product"
             },
             quantity:{
-                type:Number,
+                type:Array,
                 required:true,
                 default:1
-            },
-           total:{
-            type:String,
-            required:true
             }
     }],
     date: {
@@ -47,8 +42,7 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true,
-        default: 'cash on delivery'
     }
-})
+},{timestamps:true})
 
 module.exports = mongoose.model('Order', orderSchema)

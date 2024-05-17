@@ -1,10 +1,11 @@
 const User = require("../models/usersSchema");
 const bcrypt = require("bcrypt");
+const otpGenerator = require('otp-generator')
 const Otp = require("../controller/otpController");
 const Address = require("../models/addressSchema");
 const Order = require('../models/orderSchema')
 const Cart = require('../models/cartSchema')
-const Prodcut = require('../models/productsSchema.js');
+const Product = require('../models/productsSchema.js');
 
 const hashPassword = async (password) => {
   try {
@@ -13,8 +14,9 @@ const hashPassword = async (password) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     return hashedPassword;
   } catch (error) {
-    console.log('this is geting here');
     console.log(error.message);
+    res.render("404")
+    
   }
 };
 
@@ -26,7 +28,8 @@ const hashPassword = async (password) => {
 //             return true
 //         }
 //     } catch (error) {
-//         console.log(error.message);
+//         console.log(error.message
+   ;
 //     }
 // }
 const Ecompare = async (email1) => {
@@ -39,6 +42,8 @@ const Ecompare = async (email1) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render("404")
+    
   }
 };
 
@@ -47,6 +52,8 @@ const userRegister = async (req, res) => {
     res.render("userRegister");
   } catch (error) {
     console.log(error.message);
+    res.render("404")
+    
   }
 };
 
@@ -89,6 +96,8 @@ const createUser = async (req, res) => {
     // }
   } catch (error) {
     console.log(error.message);
+    res.render("404")
+    
   }
 };
 
@@ -111,6 +120,8 @@ const otpVerify = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render("404")
+    
   }
 };
 
@@ -134,6 +145,8 @@ const addAddress = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.render("404")
+    
   }
 }
 
@@ -142,6 +155,8 @@ const userHome = async (req, res) => {
     res.render("index");
   } catch (error) {
     console.log(error.message);
+    res.render("404")
+    
   }
 };
 
@@ -161,7 +176,6 @@ const aboutUser = async (req, res) => {
     const user = await User.find({ _id: user_id })
     const address = await Address.find({ user_id: user_id })
     const order = await Order.find({ user_id: user_id }).populate('items.productId')
-    console.log(order);
     // console.log(userData);
     // console.log(addressData);
     const data = {
@@ -325,21 +339,36 @@ const show_orders = async (req, res) => {
 }
 
 const placeOrder = async (req, res) => {
+      
   try {
-    const { name, country, address, city, district, pincode, mobile, email } = req.body
+
+
+    const { name, country, address, city, district, pincode, mobile,hidden, email } = req.body
+    let payment;
+    if(hidden !== ""){
+      payment = "Online payment";
+    }else{
+      payment = "Cash on delivery";
+    }
     const { user_id } = req.session
     const cart = await Cart.findOne({ user_id: user_id })
+    let arr = [];
+    let arrQ = [];
+    for (let i=0;i<cart.orders.length;i++){
+    let products = await Product.findOne({_id:cart.orders[i].productId})
+    arr.push(products)
+    arrQ.push(cart.orders[i].quantity);
+    }
+    console.log(arr);
     const array = cart.orders
-    console.log(array[0]);
     const order = new Order({
       user_id: user_id,
       items: [{
-        productId: array[0].productId,
-        quantity: array[0].quantity,
-        total: array[0].total
+        productId: arr,
+        quantity: arrQ,
       }],
       date: new Date(),
-      status: 'pinding',
+      status: 'pending',
       email: email,
       address: {
         name: name,
@@ -350,21 +379,17 @@ const placeOrder = async (req, res) => {
         pincode: pincode,
         mobile: mobile
       },
-      paymentMethod: 'cash on delivery'
+      paymentMethod: payment,
     })
 
     const ordered = order.save()
     if (ordered) {
-      if (array.length > 1) {
-        for (let i = 1; i < array.length; i++) {
-          const update = await Order.findOneAndUpdate({ user_id: user_id }, { $push: { items: { productId: array[i].productId, quantity: array[i].quantity, total: array[i].total } } })
-
-        }
+      if (array.length >= 1) {
+        console.log(array);
         for(let j=0;j<array.length;j++){
-          const productUpdate = await Prodcut.findOneAndUpdate({_id:array[j].productId},{$inc:{stock: -array[j].quantity}})
+          const productUpdate = await Product.findOneAndUpdate({_id:array[j].productId},{$inc:{stock: -array[j].quantity}})
 
         }
-        
       }
       await Cart.findOneAndDelete({ _id: cart._id })
       setTimeout(() => {
@@ -383,16 +408,86 @@ const updateCart = async(req,res) => {
   try {
     const {user_id} = req.session
     const {id,count} = req.query 
-
-
+    console.log(count);
+    const realCount = parseInt(count);
    const cart = await Cart.findOneAndUpdate({user_id:user_id})
    const index = cart.orders.findIndex(item => item.productId.equals(id))
-
-   console.log(count);
    if(count >= 1){
-     cart.orders[index].quantity = count;
+     cart.orders[index].quantity = realCount;
+    //  cart.orders[index].total = count*Order.
      await cart.save()
    }
+  } catch (error) {
+    console.log(error.message);
+    res.render("404")
+
+  }
+}
+
+
+
+const orderDetail = async (req,res) => {
+  try {
+    const {id,index} = req.query;
+    const datas = await Order.findOne({_id:id});
+    console.log(datas.items[0].productId[0]);
+    // console.log(datas);
+   const data = {
+      index: index ,
+      orderDetail: datas
+    }
+
+    res.render("ordersDetails",{data:data});
+  } catch (error) {
+    console.log(error.message);
+    res.render("404")
+    
+  }
+}
+
+
+const cancelOrder = async (req,res) => {
+  try {
+    const {id} = req.query
+    console.log(id);
+    const update = await Order.findOneAndUpdate({_id:id},{status:'canceled'})
+
+    if(update){
+      console.log('working')
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.render('404');
+  }
+}
+
+const sortProduct = async (req,res) => {
+  try {
+
+    const {sort} = req.query
+
+    switch (sort) {
+        case "title:1":
+        const data1 = await Product.find({}).sort({title:1})
+      res.json(data1)
+        break;
+        case "title:-1":
+         const data2 = await Product.find({}).sort({title:-1})
+       res.json(data2)
+        break;
+      case "price:1":
+       const data3 = await Product.find({}).sort({price:1})
+      res.json(data3)
+        break;
+      case "price:-1":
+        const data4 = await Product.find({}).sort({price:-1})
+
+res.json(data4)
+        break;
+      // Add more cases for other sorting options
+    //   default:
+    //     queryParams = ""; // No sorting applied
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -415,5 +510,8 @@ module.exports = {
   editAddressPage,
   editAddress,
   placeOrder,
-  updateCart
+  updateCart,
+  orderDetail,
+  cancelOrder,
+  sortProduct
 };

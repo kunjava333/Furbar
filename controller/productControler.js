@@ -10,11 +10,8 @@ const User = require('../models/usersSchema.js')
 
 const showProductsUser = async (req, res) => {
     try {
-        const category = req.params.category;
-        console.log(category);
-        const dbData = await Product.find({ $and: [{ category: category }, { blockProduct: false }] })
-        // console.log(dbData);
 
+        const dbData = await Product.find({ })
         res.render('shop', { dbData: dbData })
     } catch (error) {
         console.log(error.message);
@@ -71,8 +68,6 @@ const addToCart = async (req, res) => {
         const check = await Cart.findOne({ user_id: user_id })
         const product = await Product.findById({_id:id})
         // console.log(product.price);
-        const total = (product.price * count)
-        console.log(total);
         // let a = 0;
         if (!check) {
             const cart = new Cart({
@@ -80,7 +75,6 @@ const addToCart = async (req, res) => {
                 orders: [{
                     productId: id,
                     quantity: limit,
-                    total:total
                 }]
             })
             const result = await cart.save()
@@ -90,7 +84,7 @@ const addToCart = async (req, res) => {
             }
         } else {
 
-            const update = await Cart.findOneAndUpdate({ user_id: user_id }, { $push: { orders: { productId: id, quantity: limit ,total:total} } })
+            const update = await Cart.findOneAndUpdate({ user_id: user_id }, { $push: { orders: { productId: id, quantity: limit} } })
             if (update) {
                 // a = 1
             }
@@ -260,8 +254,8 @@ const changeProduct = async (req, res) => {
     try {
         const product_id = req.params.id
         console.log(product_id);
-        const { title, description, price, imageurl, width, hieght, weight, shippingFee, category } = req.body;
-        const check = await Product.findByIdAndUpdate({ _id: product_id }, { title: title, description: description, price: price, imageurl: imageurl, width: width, hieght: hieght, weight: weight, shippingFee: shippingFee, category: category })
+        const { title, description, price, imageurl, width, hieght, weight, shippingFee, category, stock } = req.body;
+        const check = await Product.findByIdAndUpdate({ _id: product_id }, { title: title, description: description, price: price, imageurl: imageurl, width: width, hieght: hieght, weight: weight, shippingFee: shippingFee, category: category,stock:stock })
         console.log(check);
         if (check) {
             console.log('updated');
@@ -344,13 +338,16 @@ const showCheckout = async (req,res)=>{
         const userData  = await User.findOne({_id:user_id})
         const addressData = await Adress.find({user_id:user_id})
         const cartData = await Cart.findOne({ user_id:user_id }).populate('orders.productId')
-        console.log(cartData);
+        // console.log(cartData);
+        const sum = cartData.orders.reduce((accumulator, currentValue) => accumulator += (currentValue.productId.price * currentValue.quantity),0);
+        console.log(sum);
         const fulData = {
             cart:cartData,
             address:addressData,
             user:userData,
+            total:sum,
         }
-        console.log(fulData.cart.orders);
+        // console.log(fulData.cart.orders);
         res.render('checkout',{data:fulData})
     } catch (error) {
         

@@ -504,7 +504,7 @@
                            
                             <% if(cartData) {%>
                             <% if (cartData.orders.length>0) { %>
-                                <% cartData.orders.forEach(element =>{ %>
+                                <% cartData.orders.forEach(element => { %>
                             <tr>
                                 <td class="product-thumb">
                                     <img src="/images/<%= element.productId.imageurl[0] %>" alt="" />
@@ -520,19 +520,19 @@
                                 </td>
                                 <td class="quantity">
                                     <div class="product-quantity d-inline-flex">
-                                        <button type="button" class="sub" onclick="showMessage('<%= element.productId._id %>')">
+                                        <button type="button" class="sub" onclick="showMessage('<%= element.productId._id %>','<%= element.productId.price %>')">
                                             -
                                         </button>
                                         <input type="text" value="<%= element.quantity %>" id="count"/>
                                     
-                                        <button type="button" class="add" onclick="showMessage('<%= element.productId._id %>')">
+                                        <button type="button" class="add" onclick="showMessage('<%= element.productId._id %>','<%= element.productId.price %>')">
                                             +
                                         </button>
                                         <p style="color: red;" id="message"></p>
                                     </div>
                                 </td>
-                                <td class="product-total-price">
-                                    <span id="total" class="price">$<%= element.productId.price * element.quantity %></span>
+                                <td class="product-total-price" >
+                                    <span id="total<%= element.productId._id%>"  class="price">$<%= element.productId.price * element.quantity %></span>
                                 </td>
                                 <td class="product-action">
                                     <a  href="/remove-cart?id=<%= element.productId._id %>" class="remove">
@@ -540,7 +540,8 @@
                                         Remove from Cart
                                     </a>
                                 </td>
-                                
+<% totalPrice = 0 %>
+                                <% totalPrice += element.productId.price * element.quantity %>
                             </tr>
                             <% }) %>
 
@@ -579,12 +580,13 @@
                                           <td>
                                             <p class="price" id="pricee"></p></td>
                                         <td>
-                                            <p class="price" id="pricee"><%= %></p>
+                                            <p class="price" id="pricee"><%= totalPrice %></p>
                                         </td>
                                     </tr>
                                 </tbody>
-                                <%  } %>
                                 <% } %>
+
+                                <%  } %>
                             </table>
                         </div>
                         <div class="cart-total-btn" id="checkoutButton">
@@ -777,30 +779,30 @@
     <script>
        
 
-       function showMessage(id) {
+       function showMessage(id,price) {
+
+        console.log(id);
     const message = document.getElementById('message');
     const anchorTag = document.getElementById('checkoutLink'); // Assuming 'anchorTag' is the ID of your anchor tag
     const count = parseInt(document.getElementById('count').value);
-    const money = document.getElementById('total');
-    const total = money.textContent;
-
-    const priceStartIndex = 1;
-    const price = parseFloat(total.slice(priceStartIndex).trim());
-
+    const money = document.getElementById(`total${id}`);
+    // const total = money.textContent;
+    console.log(price);
+console.log(count);
     if (count > 4) {
         message.innerHTML = 'Limit exceeds';
         anchorTag.removeAttribute('href'); // Remove the 'href' attribute to disable the anchor tag
         anchorTag.style.pointerEvents = 'none'; // Disable pointer events to prevent clicks
         anchorTag.style.color = 'gray'; // Optionally change color to indicate disabled state
-        total.textContent = count * price;
-    } else {
+    } else if(count >0) {
         message.innerHTML = '';
         anchorTag.setAttribute('href', `/checkout?count=${count}`); // Restore the 'href' attribute to enable the anchor tag
         anchorTag.style.pointerEvents = 'auto'; // Enable pointer events
         anchorTag.style.color = ''; // Reset color to default
-        fetch(`/update-cart?id=${id}&count=${count+1}`)
-
+        money.textContent = `$${count * price}`
+        fetch(`/update-cart?id=${id}&count=${count}`)
     }
+
 }
 
 

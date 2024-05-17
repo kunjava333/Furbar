@@ -16,6 +16,7 @@ userRoute.use(session({
 const userController = require('../controller/userController');
 const checkSession  = require('../midleware/session');
 const productController = require('../controller/productControler');
+const paymentController = require('../controller/paymentController');
 
 //User Login
 userRoute.get('/',checkSession.isLogout,userController.userLogin);
@@ -43,7 +44,7 @@ userRoute.get('/newOtp',userController.otpResend);
 
 //Products
 userRoute.get('/product_details/:id',checkSession.isLogin,productController.productDetails);
-userRoute.get('/showProduct-user/:category',checkSession.isLogin,productController.showProductsUser);
+userRoute.get('/products',checkSession.isLogin,productController.showProductsUser);
 
 
 //ABOUT USER
@@ -73,5 +74,13 @@ userRoute.post('/order',userController.placeOrder);
 userRoute.get('/remove-cart',checkSession.isLogin,productController.removeCart);
 
 
+userRoute.get('/order-detail',checkSession.isLogin,userController.orderDetail);
+userRoute.get('/cancel-order',checkSession.isLogin,userController.cancelOrder);
+
+
+userRoute.get('/sort-products',checkSession.isLogin,userController.sortProduct)
+userRoute.get('/initiate-order',paymentController.createOrder)
+
+userRoute.post('/verify-payment',paymentController.verifyPayment);
 
 module.exports = userRoute;

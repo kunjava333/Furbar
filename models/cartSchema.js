@@ -3,8 +3,9 @@ const mongoose = require('mongoose')
 
 const cartSchema = new mongoose.Schema({
     user_id:{
-        type:String,
-        required:true
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"User"
     },
     orders:[{
         productId:{
@@ -17,10 +18,6 @@ const cartSchema = new mongoose.Schema({
             required:true,
             default:1
         },
-       total:{
-        type:String,
-        required:true
-        }
     }]
 })
 

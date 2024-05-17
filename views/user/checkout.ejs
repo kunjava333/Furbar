@@ -846,6 +846,11 @@
                   </div>
                   <div class="col-sm-6">
                     <div class="single-form">
+                      <input type="hidden" value="" name="hidden" id="hidden" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="single-form">
                       <input type="text" value="" name="email" id="email" />
                     </div>
                   </div>
@@ -869,13 +874,6 @@
                                     <span></span> Ship to a different
                                     address?</label>
                             </div> -->
-
-                <div class="single-form checkout-note">
-                  <label class="form-label">Order notes</label>
-                  <textarea
-                    placeholder="Notes about your order, e.g. special notes for delivery."
-                  ></textarea>
-                </div>
               </div>
               <!-- Checkout Form End -->
             </div>
@@ -905,59 +903,31 @@
                           <p><%= element.quantity %></p>
                         </td>
                         <td class="Product-price">
-                          <p></p>
+                          <p>
+                            <%= element.productId.price * element.quantity%>
+                          </p>
                         </td>
                       </tr>
 
                       <% }) %>
                     </tbody>
                     <tfoot>
-                      <tr>
+                      <!-- <tr>
                         <td class="Product-name">
                           <p>Subtotal</p>
                         </td>
                         <td class="Product-price">
-                          <p>$150.00</p>
+
+                          <p id="subTotal">$<%= data.total %></p>
                         </td>
-                      </tr>
-                      <tr>
-                        <td class="Product-name">
-                          <p>Shipping</p>
-                        </td>
-                        <td class="Product-price">
-                          <ul class="shipping-list">
-                            <li class="radio">
-                              <input
-                                type="radio"
-                                name="shipping"
-                                id="radio1"
-                                checked
-                              />
-                              <label for="radio1"
-                                ><span></span> Flat Rate</label
-                              >
-                            </li>
-                            <li class="radio">
-                              <input type="radio" name="shipping" id="radio2" />
-                              <label for="radio2"
-                                ><span></span> Free Shipping</label
-                              >
-                            </li>
-                            <li class="radio">
-                              <input type="radio" name="shipping" id="radio3" />
-                              <label for="radio3"
-                                ><span></span> Local Pickup</label
-                              >
-                            </li>
-                          </ul>
-                        </td>
-                      </tr>
+                      </tr> -->
+
                       <tr>
                         <td class="Product-name">
                           <p>Total</p>
                         </td>
                         <td class="total-price">
-                          <p>$<%=  %></p>
+                          <p id="total">$<%= data.total %></p>
                         </td>
                       </tr>
                     </tfoot>
@@ -966,7 +936,7 @@
 
                 <div class="checkout-payment">
                   <ul>
-                    <li>
+                    <!-- <li>
                       <div class="single-payment">
                         <div class="payment-radio radio">
                           <input type="radio" name="radio" id="bank" />
@@ -983,19 +953,18 @@
                           </div>
                         </div>
                       </div>
-                    </li>
+                    </li> -->
                     <li>
                       <div class="single-payment">
                         <div class="payment-radio radio">
                           <input type="radio" name="radio" id="check" />
-                          <label for="check"
-                            ><span></span> Check payments
+                          <label id="onlinePay" for="check"
+                            ><span></span>Online payment
                           </label>
 
                           <div class="payment-details">
                             <p>
-                              Please send a check to Store Name, Store Street,
-                              Store Town, Store State / County, Store Postcode.
+                              pay online with the help of intergrated razorpay
                             </p>
                           </div>
                         </div>
@@ -1020,7 +989,7 @@
                         </div>
                       </div>
                     </li>
-                    <li>
+                    <!-- <li>
                       <div class="single-payment">
                         <div class="payment-radio radio">
                           <input type="radio" name="radio" id="paypal" />
@@ -1042,13 +1011,14 @@
                           </div>
                         </div>
                       </div>
-                    </li>
+                    </li> -->
                   </ul>
 
                   <div class="single-form">
                     <a
                       id="button"
                       class="btn btn-primary btn-hover-dark d-block"
+                      onclick="checking()"
                       >Place Order</a
                     >
                   </div>
@@ -1358,26 +1328,126 @@
         // All fields are valid
         return true;
       };
+      function payment() {
+        console.log("no problem");
+
+        const total = document.getElementById("total").textContent;
+        const checked = document.getElementById("check");
+
+        if (checked.checked) {
+          console.log("this is inside if");
+
+          fetch(`/initiate-order?price=${total}`)
+            .then((res) => res.json())
+            .then(function (data) {
+              if (data) {
+                const hidden = document.getElementById("hidden");
+                hidden.value = "Online payment";
+                var options = {
+                  key: data.key_id,
+                  amount: data.amount,
+                  currency: "INR",
+                  name: "Zephyr",
+                  description: "Transaction Description",
+                  image: "https://example.com/your_logo",
+                  order_id: data.razorpayOrderId,
+                  handler: function (response) {
+                    verifyPayment(
+                      response.razorpay_payment_id,
+                      data.orderId,
+                      response.razorpay_signature,
+                      response.status_code,
+                    );
+                  },
+                  prefill: {
+                    name: "Customer Name",
+                    email: "customer_email@example.com",
+                    contact: "customer_phone",
+                  },
+                  theme: {
+                    color: "#192e68",
+                  },
+                };
+                var paymentGateway = new Razorpay(options);
+                paymentGateway.open();
+              } else {
+                alert("Error: No data received from server");
+              }
+            })
+            .catch(function (error) {
+              console.error("Error during fetch:", error);
+              alert("Error: Failed to fetch data from server");
+            });
+        } else {
+          return true;
+        }
+      }
+
+      function verifyPayment(paymentId, orderId, signature,status_code) {
+        fetch("/verify-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            razorpay_payment_id: paymentId,
+            order_id: orderId,
+            razorpay_signature: signature,
+            status_code:status_code,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success !== "undefined") { 
+              console.log('data of second fetch post ',+data);
+              Swal.fire({
+                icon: "success",
+                title: "Congrats",
+                text: "Your order has been placed!",
+              });
+
+              // setTimeout(() => {
+              //   form.submit();
+              // }, 300);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          });
+      }
 
       // Example: Attach the validation function to a form submit event
       const form = document.getElementById("Form");
       const button = document.getElementById("button");
-      button.addEventListener("click", (event) => {
-        // Prevent form submission for demonstration
-        const state = validateForm();
-        // Validate the form before submitting
-        if (state == true) {
-          // Form is valid, proceed with form submission (e.g., AJAX request)
-          console.log("Form submitted successfully.");
-          
-          form.submit();
 
-          // Add further logic here (e.g., submit form data via AJAX)
+      async function checking() {
+        const state = validateForm();
+
+        if (state == true) {
+          const paymentState = await payment();
+          console.log(paymentState);
+          if (paymentState == true) {
+            // Form is valid, proceed with form submission (e.g., AJAX request)
+            console.log("Form submitted successfully.");
+            Swal.fire({
+              icon: "success",
+              title: "Congrats",
+              text: "Your order has been placed!",
+            });
+
+            setTimeout(() => {
+              form.submit();
+            }, 300);
+
+            // Add further logic here (e.g., submit form data via AJAX)
+          }
         } else {
           event.preventDefault();
         }
-      });
-
+      }
       async function updateAddressFields() {
         const selectElement = document.getElementById("address_select").value;
         console.log(selectElement);
@@ -1419,8 +1489,11 @@
       }
     </script>
 
+    <script></script>
+
     <!-- SWEET ALET SCRIPT  -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <!-- Modernizer & jQuery JS -->
     <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script>
