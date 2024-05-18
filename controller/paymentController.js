@@ -17,7 +17,7 @@ const createOrder = async (req,res)=>{
         const options = {
             amount: amount,
             currency: 'USD',
-            receipt: 'vaseemkunjava@gmail.com'
+            receipt: 'vaseemformoney@gmail.com'
         }
         razorpayInstance.orders.create(options,(err,order) => {
                 if(!err){
@@ -62,7 +62,7 @@ const verifyPayment = async (req,res) => {
     console.log(payload,razorpaySignature,webhookSecret);
         if (verifyRazorpaySignature(payload, razorpaySignature, webhookSecret) || status_code == 200) {
             console.log('Signature verified successfully');
-            res.status(200).json({ message: 'Verified' });
+            res.status(200).send({ success: 'Verified' });
         } else {
             console.log('Failed');
             res.status(400).failed('Invalid signature');

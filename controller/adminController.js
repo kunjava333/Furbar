@@ -142,6 +142,8 @@ const changeStatus = async (req,res) => {
 }
 
 
+
+
 module.exports = {
     adminLogin,
     adminAuth,
@@ -153,6 +155,6 @@ module.exports = {
     unblockUser,
     logout,
     orderDetails,
-    changeStatus
+    changeStatus,
 }
 

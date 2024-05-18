@@ -18,11 +18,13 @@ adminRoute.use(session({
 
 
 
-const adminSession = require('../midleware/adminSession')
+const adminSession = require('../middleware/adminSession')
 const adminController = require('../controller/adminController')
-const upload = require('../midleware/multer')
+const upload = require('../middleware/multer')
 const productControler = require('../controller/productControler')
 const categoryControler = require('../controller/categoryControler')
+const coupenController = require('../controller/coupenController')
+
 
 adminRoute.get('/',adminController.adminLogin);
 adminRoute.post('/adminLog',adminController.adminAuth)
@@ -69,6 +71,16 @@ adminRoute.get('/delete-category',categoryControler.deleteCategory)
 
 adminRoute.get('/order-details',adminController.orderDetails);
 adminRoute.get('/status-change',adminController.changeStatus);
+
+
+// COUPEN SETTINGS
+adminRoute.get('/coupen-manegement',coupenController.coupenPage)
+adminRoute.get('/create-coupen',coupenController.coupenAddPage)
+adminRoute.post('/add-coupen',coupenController.addCoupen)
+
+adminRoute.get('/coupen-list',coupenController.listCoupen)
+adminRoute.get('/coupen-unlist',coupenController.unlistCoupen)
+
 
 adminRoute.get('*',(req,res)=>{   
     res.redirect('/admin')

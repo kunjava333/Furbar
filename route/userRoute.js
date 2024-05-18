@@ -14,9 +14,10 @@ userRoute.use(session({
   }));;
 
 const userController = require('../controller/userController');
-const checkSession  = require('../midleware/session');
+const checkSession  = require('../middleware/session');
 const productController = require('../controller/productControler');
 const paymentController = require('../controller/paymentController');
+const coupenController = require('../controller/coupenController')
 
 //User Login
 userRoute.get('/',checkSession.isLogout,userController.userLogin);
@@ -82,5 +83,7 @@ userRoute.get('/sort-products',checkSession.isLogin,userController.sortProduct)
 userRoute.get('/initiate-order',paymentController.createOrder)
 
 userRoute.post('/verify-payment',paymentController.verifyPayment);
+
+userRoute.get('/apply-coupen',coupenController.applyCoupen);
 
 module.exports = userRoute;

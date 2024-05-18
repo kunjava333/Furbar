@@ -68,6 +68,12 @@
                         <span class="text">Category</span>
                     </a>
                 </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin/coupen-manegement">
+                        <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Coupens</span>
+                    </a>
+                </li>
                 <li class="menu-item">
                     <a class="menu-link" href="/admin/transaction">
                         <i class="icon material-icons md-monetization_on"></i>
@@ -283,25 +289,25 @@
                                     </thead>
                                     <tbody>
                                         <% if(detailData !=="undefined" ){ %>
-                                            <% detailData.items.forEach(element=> { %>
+                                            <% detailData.items[0].productId.forEach(element=> { %>
 
                                                 <tr>
                                                     <td>
                                                         <a class="itemside" href="#">
                                                             <div class="left">
-                                                                <img src="/images/<%= element.productId.imageurl[0] %>"
+                                                                <img src="/images/<%= element.imageurl[0] %>"
                                                                     width="40" height="40" class="img-xs" alt="Item" />
                                                             </div>
                                                             <div class="info"></div>
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <%= element.productId.price %>
+                                                        <%= element.price %>
                                                     </td>
                                                     <td>
                                                         <%= element.quantity %>
                                                     </td>
-                                                    <td class="text-end"><%= element.productId.price * element.quantity %></td>
+                                                    <td class="text-end"><%= element.price * element.quantity %></td>
                                                 </tr>
 
                                                 <% }); %>
