@@ -288,9 +288,9 @@
                   >
                   <input
                     type="text"
-                    placeholder="Type here"
                     class="form-control"
                     name="name"
+                    value="<%= data1.data.name %>"
                     id="product_title"
                   />
                 </div>
@@ -302,6 +302,7 @@
                       placeholder="Type here"
                       class="form-control"
                       name="code"
+                      value="<%= data1.data.code %>"
                       id="product_sku"
                     />
                   </div>
@@ -314,6 +315,8 @@
                       placeholder="Type here"
                       class="form-control"
                       name="min"
+                      value="<%= data1.data.minAmmount %>"
+
                       id="product_color"
                     />
                   </div>
@@ -326,19 +329,20 @@
                       placeholder="20% - 70%"
                       class="form-control"
                       name="discount"
+                      value="<%= data1.data.discAmmount %>"
                       id="product_size"
                     />
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="product_brand" class="form-label"
-                    >Expiry Date</label
-                  >
+                    >Expiry Date</label>
                   <input
                     type="date"
                     placeholder="Type here"
                     class="form-control"
                     name="date"
+                    value="<%= data1.date %>"
                     id="product_brand"
                   />
                 </div>
@@ -350,11 +354,10 @@
                 <div>
                   <label class="form-label">Description</label>
                   <textarea
-                    placeholder="Type here"
                     class="form-control"
                     name="description"
                     rows="4"
-                  ></textarea>
+                  ><%= data1.data.description %></textarea>
                 </div>
               </div>
             </div>

@@ -266,7 +266,7 @@
                                                     <div class="button-container">
                                                     <td class="text-end">
                                                         <div class="dropdown">
-                                                            <a href="/admin/edit-category?id=<%= element._id %>"
+                                                            <a href="/admin/coupen-list?id=<%= element.id %>"
                                                                 class="btn btn-sm font-sm rounded btn-primary">Edit
                                                                 info</a>
 
@@ -280,7 +280,7 @@
 
                                                                     <% } %>
 
-                                                                        <a class="btn btn-sm font-sm btn-danger">Delete
+                                                                        <a href="/admin/coupen-delete?id=<%= element.id %>" class="btn btn-sm font-sm btn-danger">Delete
                                                                             Coupen</a>
                                                         </div>
                                                         <!-- dropdown //end -->

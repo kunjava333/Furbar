@@ -6,6 +6,7 @@ const Address = require("../models/addressSchema");
 const Order = require('../models/orderSchema')
 const Cart = require('../models/cartSchema')
 const Product = require('../models/productsSchema.js');
+const Wishlist = require('../models/wishlistSchema.js')
 
 const hashPassword = async (password) => {
   try {
@@ -343,7 +344,9 @@ const placeOrder = async (req, res) => {
   try {
 
 
-    const { name, country, address, city, district, pincode, mobile,hidden, email } = req.body
+    const { name, country, address, city, district, pincode, mobile,hidden, email, totalPrice } = req.body
+    console.log(totalPrice);
+    const cash = totalPrice.slice(1)
     let payment;
     if(hidden !== ""){
       payment = "Online payment";
@@ -379,6 +382,7 @@ const placeOrder = async (req, res) => {
         pincode: pincode,
         mobile: mobile
       },
+      toal:cash,
       paymentMethod: payment,
     })
 
@@ -493,6 +497,15 @@ res.json(data4)
   }
 }
 
+
+
+
+
+
+
+
+
+
 module.exports = {
   userLogin,
   userRegister,
@@ -513,5 +526,6 @@ module.exports = {
   updateCart,
   orderDetail,
   cancelOrder,
-  sortProduct
+  sortProduct,
+  
 };

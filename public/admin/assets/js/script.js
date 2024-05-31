@@ -166,7 +166,7 @@ async function blockUser(tag, id) {
         tag.textContent = "Block"
         tag.style.color = 'white'
         tag.style.backgroundColor = 'red'
-      }
+      }1
 
       fetch(`/admin/${thing}/${id}`)
         .then(response => {

@@ -4,7 +4,7 @@ const otpGenerator = require('otp-generator')
 let gloabal = null;
 
 const sendMail = (email, otp) => {
-  const transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({ 
       host: "smtp.gmail.com",
       port: 465,
       secure: true,

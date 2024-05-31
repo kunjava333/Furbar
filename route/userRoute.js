@@ -13,11 +13,15 @@ userRoute.use(session({
     saveUninitialized: true
   }));;
 
+
+  //CONTROLLS
+
 const userController = require('../controller/userController');
 const checkSession  = require('../middleware/session');
 const productController = require('../controller/productControler');
 const paymentController = require('../controller/paymentController');
-const coupenController = require('../controller/coupenController')
+const coupenController = require('../controller/coupenController');
+const wishlistController = require('../controller/wishlistController');
 
 //User Login
 userRoute.get('/',checkSession.isLogout,userController.userLogin);
@@ -84,6 +88,15 @@ userRoute.get('/initiate-order',paymentController.createOrder)
 
 userRoute.post('/verify-payment',paymentController.verifyPayment);
 
-userRoute.get('/apply-coupen',coupenController.applyCoupen);
+userRoute.get('/apply-coupen',checkSession.isLogin,coupenController.applyCoupen);
+
+
+
+userRoute.get('/wishlist',checkSession.isLogin,wishlistController.showWishlist);
+userRoute.get('/wishlist-add',checkSession.isLogin,wishlistController.addToWishlist);
+
+userRoute.get('/wishlist-to-cart',checkSession.isLogin,wishlistController.wishToCart);
+userRoute.get('/remove-from-wish',checkSession.isLogin,wishlistController.removeFromWishlist)
+
 
 module.exports = userRoute;

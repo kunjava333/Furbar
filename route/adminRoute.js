@@ -74,12 +74,14 @@ adminRoute.get('/status-change',adminController.changeStatus);
 
 
 // COUPEN SETTINGS
-adminRoute.get('/coupen-manegement',coupenController.coupenPage)
-adminRoute.get('/create-coupen',coupenController.coupenAddPage)
-adminRoute.post('/add-coupen',coupenController.addCoupen)
+adminRoute.get('/coupen-manegement',coupenController.coupenPage);
+adminRoute.get('/create-coupen',coupenController.coupenAddPage);
+adminRoute.post('/add-coupen',coupenController.addCoupen);
 
-adminRoute.get('/coupen-list',coupenController.listCoupen)
-adminRoute.get('/coupen-unlist',coupenController.unlistCoupen)
+adminRoute.get('/coupen-list',coupenController.listCoupen);
+adminRoute.get('/coupen-unlist',coupenController.unlistCoupen);
+adminRoute.get('/coupen-delete',coupenController.deleteCoupen);
+adminRoute.get('/coupen-edit',coupenController.editCoupen);
 
 
 adminRoute.get('*',(req,res)=>{   

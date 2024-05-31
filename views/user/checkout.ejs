@@ -581,6 +581,7 @@
                         </select>
                       </div>
                     </div>
+                    <input type="hidden" id="totalPrice" name="totalPrice">
 
                     <div class="row">
                       <div class="col-sm-6">
@@ -1259,7 +1260,8 @@
 
     async function checking() {
       const state = validateForm();
-
+      const cash = document.getElementById('total').textContent;
+      document.getElementById('totalPrice').textContent = cash;
       if (state == true) {
         const paymentState = await payment();
         console.log(paymentState);
@@ -1336,14 +1338,25 @@
       return res.json();
     })
     .then(function (data) {
+      if(data.discount){
       const total = document.getElementById("total").textContent;
+      console.log(total);
       const money = total.slice(1);
+      console.log(money);
       const price = Math.floor((data.discount/100)*money)
       console.log(price);
 
       document.getElementById("total").textContent = ` $${price}`;
       // Further processing of the response data can go here
+      }else{
+          Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: `${data.message}`,
+            });
+      }
     })
+  
     .catch((error) => {
       console.error('There was a problem with the fetch operation:', error);
     });
